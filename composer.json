@@ -1,8 +1,5 @@
 {
     "name": "marcbp/ping-this",
-    "require": {
-        "doctrine/cache": "^1.6"
-    },
     "license": "MIT",
     "authors": [
         {
@@ -12,7 +9,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "MarcBP\\PingThis": "src/"
+            "MarcBP\\PingThis\\": "src/"
         }
     }
 }
