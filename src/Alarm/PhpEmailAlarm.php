@@ -4,28 +4,26 @@ namespace MarcBP\PingThis\Alarm;
 
 use MarcBP\PingThis\Ping\PingInterface;
 
+/**
+ * Send an email for each alarm raised, using the PHP's mail function.
+ */
 class PhpEmailAlarm extends AbstractAlarm
 {
     protected $email;
     protected $subject;
-    
+
     public function __construct($email)
     {
         $this->email = $email;
     }
-    
+
     public function start(PingInterface $ping)
     {
-        @mail($this->email, $this->formatEmailSubject(true, $ping), $error);
+        @mail($this->email, $this->formatStartMessage($ping), $error);
     }
-    
+
     public function stop(PingInterface $ping)
     {
-        @mail($this->email, $this->formatEmailSubject(false, $ping), $error);
-    }
-    
-    protected function formatEmailSubject($isStarting, PingInterface $ping)
-    {
-        return sprintf('[%s] %s', $ping->getName(), $isStarting ? 'alarm triggered' : 'end of alert');
+        @mail($this->email, $this->formatEndMessage($ping), $error);
     }
 }
