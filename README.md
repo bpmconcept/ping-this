@@ -48,3 +48,4 @@ Name            | Description
 :-------------- | :---------------------------------------------------------------------------------------
 PhpEmailAlarm   | Send an email, using the PHP's mail() function
 StreamAlarm     | Simply logs the alarms events to a given open stream (stdout or file for instance)
+ParallelAlarm   | Dispatch the alert on multiple other Alarm instances
