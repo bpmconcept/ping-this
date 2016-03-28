@@ -6,7 +6,7 @@ use JJG\Ping;
 
 class NetworkPing extends AbstractPing
 {
-	const METHOD_SYSTEM_PIN = 'exec';
+	const METHOD_SYSTEM_PING = 'exec';
 	const METHOD_SOCKET = 'fsockopen';
 
 	protected $ping;
@@ -21,6 +21,7 @@ class NetworkPing extends AbstractPing
 
         parent::__construct($name, $frequency);
 		$this->ping = new Ping($host);
+        $this->method = self::METHOD_SYSTEM_PING;
     }
 
 	public function setTtl($ttl)

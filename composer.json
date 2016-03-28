@@ -7,6 +7,9 @@
             "email": "marc.blancpatin@bpmconcept.com"
         }
     ],
+    "require-dev": {
+        "geerlingguy/ping": "~1.0"
+    },
 	"suggest": {
 		"geerlingguy/ping": "Required by NetworkPing"
 	},
