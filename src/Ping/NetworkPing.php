@@ -41,7 +41,7 @@ class NetworkPing extends AbstractPing
 
     public function getLastError()
 	{
-		return sprintf('Host %s did not respond', $this->ping->getHost());
+		return sprintf('Host %s is unreachable', $this->ping->getHost());
 	}
 
     public function ping()

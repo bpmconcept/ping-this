@@ -11,7 +11,7 @@ class NetworkPingTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($ping->ping());
     }
     
-        public function testSocketPing()
+    public function testSocketPing()
     {
         $ping = new NetworkPing('test', 0, 'google.com');
         $ping->setMethod(NetworkPing::METHOD_SOCKET);

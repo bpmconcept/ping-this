@@ -39,7 +39,7 @@ class HttpHeaderPing extends AbstractPing
 
     public function getLastError()
 	{
-		return sprintf('Page %s did not respond correctly (%s)', $this->address, $this->error);
+		return sprintf('Page %s does not respond correctly (%s)', $this->address, $this->error);
 	}
 
     public function ping()
