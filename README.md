@@ -29,14 +29,6 @@ $daemon->registerAlarm(new PhpEmailAlarm('your@email.com'));
 $daemon->run();
 ```
 
-## Installation
-
-The recommended way to install PingThis is through Composer :
-
-```
-composer require marcbp/ping-this
-```
-
 ## Quick description
 
 PingThis aims to provide a simple and effective way for monitoring whatever your want.
@@ -45,19 +37,33 @@ verifies each Ping and, in case of failing, triggers the Alarm. Any class could 
 like an Alarm or a Ping, provided that it implements respectively the `AlarmInterface`
 or the `PingInterface`.
 
-### Built-in pings
+### Built-in Pings
 
 Name                            | Description
 :------------------------------ | :---------------------------------------------------------------------------------------
 NetworkPing                     | A standard ICMP ping, or, failing that, an attempt to open a socket on a specified port
 HttpHeaderPing                  | Check through headers only if a web server answers correctly to a GET request
-SshPing                         | Run a custom command through SSH
 TlsCertificateExpirationPing    | Check the expiration date of a web server's certificate
+SshCommandPing                  | Run a custom command through SSH [**todo**]
 
-### Built-in alarms
+### Built-in Alarms
 
 Name            | Description
 :-------------- | :---------------------------------------------------------------------------------------
 PhpEmailAlarm   | Send an email, using the PHP's mail() function
 StreamAlarm     | Simply logs the alarms events to a given open stream (stdout or file for instance)
 ParallelAlarm   | Dispatch the alert on multiple other Alarm instances
+
+## Installation
+
+The recommended way to install PingThis is through Composer :
+
+```
+composer require marcbp/ping-this
+```
+
+PingThis does not intend to provide a fully functional daemon out of the box. You are
+still responsible for writing a configured daemon like in the previous example. Thereafter,
+a real daemon can be registered to your favorite init system like [systemd](https://freedesktop.org/wiki/Software/systemd/),
+[upstart](https://help.ubuntu.com/community/UbuntuBootupHowto) or [supervisor](http://supervisord.org/).
+
