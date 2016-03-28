@@ -41,6 +41,7 @@ or the `PingInterface`.
 Name            | Description
 :-------------- | :---------------------------------------------------------------------------------------
 NetworkPing     | A standard ICMP ping, or, failing that, an attempt to open a socket on a specified port
+HttpHeaderPing  | Check through headers only if a web server answers correctly to a GET request
 
 ### Built-in alarms
 
