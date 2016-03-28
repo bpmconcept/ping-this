@@ -7,4 +7,6 @@ php:
   - hhvm
   - nightly
 before_script:
-  - composer install
+  - sudo apt-get -qq update
+  - sudo apt-get install -y iputils-ping
+  - composer install --dev
