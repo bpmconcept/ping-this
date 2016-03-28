@@ -18,12 +18,18 @@ composer require marcbp/ping-this
 use MarcBP\PingThis\Daemon;
 use MarcBP\PingThis\Alarm\PhpEmailAlarm;
 use MarcBP\PingThis\Ping\NetworkPing;
+use MarcBP\PingThis\Ping\HttpHeaderPing;
 
 $daemon = new Daemon();
 
+// Check if the host correctly answers to ping
+$daemon->registerPing(new NetworkPing('ping-host1', 10, 'host1.domain.com'));
+
+// Check if a web server correctly answers to HTTP requests
+$daemon->registerPing(new HttpHeaderPing('http-host2', 10, 'http://host2.domain.com'));
+
+// Otherwise send an email to alert an admin
 $daemon->registerAlarm(new PhpEmailAlarm('your@email.com'));
-$daemon->registerPing(new NetworkPing('host1', 20, 'host1.domain.com'));
-$daemon->registerPing(new NetworkPing('host2', 20, 'host2.domain.com'));
 
 $daemon->run();
 ```
