@@ -6,8 +6,9 @@ class NetworkPingTest extends PHPUnit_Framework_TestCase
 {
     public function testPingOk()
     {
-        $ping = new NetworkPing('test', 0, '127.0.0.1');
+        $ping = new NetworkPing('test', 0, 'google.com');
         $ping->setMethod(NetworkPing::METHOD_SOCKET);
+        $ping->setPort(80);
         $this->assertTrue($ping->ping());
     }
     
