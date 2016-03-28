@@ -7,11 +7,6 @@ class NetworkPingTest extends PHPUnit_Framework_TestCase
     public function testPingOk()
     {
         $ping = new NetworkPing('test', 0, '127.0.0.1');
-        $this->assertTrue($ping->ping());
-        
-        $ping->setMethod(NetworkPing::METHOD_SYSTEM_PING);
-        $this->assertTrue($ping->ping());
-        
         $ping->setMethod(NetworkPing::METHOD_SOCKET);
         $this->assertTrue($ping->ping());
     }
@@ -19,6 +14,7 @@ class NetworkPingTest extends PHPUnit_Framework_TestCase
     public function testPingUnvalid()
     {
         $ping = new NetworkPing('test', 0, 'does.not.exist');
+        $ping->setMethod(NetworkPing::METHOD_SOCKET);
         $this->assertFalse($ping->ping());
     }
 }
