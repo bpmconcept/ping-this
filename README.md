@@ -4,14 +4,6 @@
 
 PingThis is an extremely lightweight PHP 5.4+ tool to build a simple but functional headless monitoring system.
 
-## Installation
-
-The recommended way to install PingThis is through Composer :
-
-```
-composer require marcbp/ping-this
-```
-
 ## Example
 
 ``` php
@@ -22,16 +14,27 @@ use MarcBP\PingThis\Ping\HttpHeaderPing;
 
 $daemon = new Daemon();
 
-// Check if the host correctly answers to ping
-$daemon->registerPing(new NetworkPing('ping-host1', 10, 'host1.domain.com'));
+// Check if the host correctly answers to ping every 10 seconds
+$daemon->registerPing(new NetworkPing('ping-domain', 10, 'domain.com'));
 
-// Check if a web server correctly answers to HTTP requests
-$daemon->registerPing(new HttpHeaderPing('http-host2', 10, 'http://host2.domain.com'));
+// Check if a web server correctly answers to HTTP requests every minute
+$daemon->registerPing(new HttpHeaderPing('http-domain', 60, 'http://domain.com'));
+
+// Check every day that your web server's certificate won't expire during the next week
+$daemon->registerPing(new TlsCertificateExpirationPing('certificate-domain', 86400, 'ssl://domain.com:443', '+7 days'));
 
 // Otherwise send an email to alert an admin
 $daemon->registerAlarm(new PhpEmailAlarm('your@email.com'));
 
 $daemon->run();
+```
+
+## Installation
+
+The recommended way to install PingThis is through Composer :
+
+```
+composer require marcbp/ping-this
 ```
 
 ## Quick description
@@ -44,10 +47,12 @@ or the `PingInterface`.
 
 ### Built-in pings
 
-Name            | Description
-:-------------- | :---------------------------------------------------------------------------------------
-NetworkPing     | A standard ICMP ping, or, failing that, an attempt to open a socket on a specified port
-HttpHeaderPing  | Check through headers only if a web server answers correctly to a GET request
+Name                            | Description
+:------------------------------ | :---------------------------------------------------------------------------------------
+NetworkPing                     | A standard ICMP ping, or, failing that, an attempt to open a socket on a specified port
+HttpHeaderPing                  | Check through headers only if a web server answers correctly to a GET request
+SshPing                         | Run a custom command through SSH
+TlsCertificateExpirationPing    | Check the expiration date of a web server's certificate
 
 ### Built-in alarms
 
