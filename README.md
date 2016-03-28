@@ -12,7 +12,7 @@ The recommended way to install PingThis is through Composer :
 composer require marcbp/ping-this
 ```
 
-### Example
+## Example
 
 ``` php
 use MarcBP\PingThis\Daemon;
@@ -22,10 +22,19 @@ use MarcBP\PingThis\Ping\NetworkPing;
 $daemon = new Daemon();
 
 $daemon->registerAlarm(new PhpEmailAlarm('your@email.com'));
-$daemon->registerPing(new NetworkPing('ping', 20, 'your.host.com'));
+$daemon->registerPing(new NetworkPing('host1', 20, 'host1.domain.com'));
+$daemon->registerPing(new NetworkPing('host2', 20, 'host2.domain.com'));
 
 $daemon->run();
 ```
+
+## Quick description
+
+PingThis aims to provide a simple and effective way for monitoring whatever your want.
+Configure a daemon with one Alarm and one or multiple Pings. The Daemon periodically
+verifies each Ping and, in case of failing, triggers the Alarm. Any class could act
+like an Alarm or a Ping, provided that it implements respectively the `AlarmInterface`
+or the `PingInterface`.
 
 ### Built-in pings
 
