@@ -4,15 +4,18 @@ use MarcBP\PingThis\Ping\NetworkPing;
 
 class NetworkPingTest extends PHPUnit_Framework_TestCase
 {
-    public function testPingOk()
+    public function testSystemPing()
     {
         $ping = new NetworkPing('test', 0, '127.0.0.1');
-        $this->assertTrue($ping->ping());
-        
         $ping->setMethod(NetworkPing::METHOD_SYSTEM_PING);
         $this->assertTrue($ping->ping());
-        
+    }
+    
+        public function testSocketPing()
+    {
+        $ping = new NetworkPing('test', 0, 'google.com');
         $ping->setMethod(NetworkPing::METHOD_SOCKET);
+        $ping->setPort(80);
         $this->assertTrue($ping->ping());
     }
     
