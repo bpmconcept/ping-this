@@ -12,13 +12,13 @@ class TlsCertificateExpirationPing extends AbstractPing
     protected $threshold;
     protected $date;
     
-	public function __construct($name, $frequency, $socket, $threshold)
+	public function __construct($frequency, $socket, $threshold)
     {
         if (!function_exists('openssl_x509_parse')) {
 			trigger_error('TlsCertificateExpirationPing requires the OpenSSL module', E_USER_ERROR);
 		}
         
-        parent::__construct($name, $frequency);
+        parent::__construct($frequency);
         
 		$this->socket = $socket;
         $this->threshold = $threshold;

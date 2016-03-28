@@ -10,7 +10,7 @@ class ParallelAlarmTest extends PHPUnit_Framework_TestCase
         $dispatcher = new ParallelAlarm();
         
         $ping = $this->getMockBuilder('MarcBP\PingThis\Ping\AbstractPing')
-            ->setConstructorArgs(['test', 0])
+            ->setConstructorArgs([0])
             ->getMock();
         
         for ($i = 1; $i <= 5; $i++) {

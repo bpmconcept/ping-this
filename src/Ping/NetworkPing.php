@@ -13,13 +13,13 @@ class NetworkPing extends AbstractPing
 	protected $method;
 	protected $latency;
 
-	public function __construct($name, $frequency, $host)
+	public function __construct($frequency, $host)
     {
 		if (!class_exists('JJG\\Ping')) {
 			trigger_error('NetworkPing requires "geerlingguy/ping" package installed', E_USER_ERROR);
 		}
 
-        parent::__construct($name, $frequency);
+        parent::__construct($frequency);
 		$this->ping = new Ping($host);
         $this->method = self::METHOD_SYSTEM_PING;
     }

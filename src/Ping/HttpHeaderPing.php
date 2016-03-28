@@ -13,9 +13,9 @@ class HttpHeaderPing extends AbstractPing
     protected $expectedCode;
     protected $checks = [];
 
-	public function __construct($name, $frequency, $address, $code = 200, $headers = [])
+	public function __construct($frequency, $address, $code = 200, $headers = [])
     {
-        parent::__construct($name, $frequency);
+        parent::__construct($frequency);
         
 		$this->address = $address;
         $this->expectedCode = $code;

@@ -11,7 +11,7 @@ class DaemonTest extends PHPUnit_Framework_TestCase
         $daemon = new Daemon();
         
         $ping = $this->getMockBuilder('MarcBP\PingThis\Ping\AbstractPing')
-            ->setConstructorArgs(['test', 0])
+            ->setConstructorArgs([0])
             ->getMock();
         
         $alarm = $this->getMockForAbstractClass('MarcBP\PingThis\Alarm\AbstractAlarm');

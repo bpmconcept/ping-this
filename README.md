@@ -15,13 +15,13 @@ use MarcBP\PingThis\Ping\HttpHeaderPing;
 $daemon = new Daemon();
 
 // Check if the host correctly answers to ping every 10 seconds
-$daemon->registerPing(new NetworkPing('ping-domain', 10, 'domain.com'));
+$daemon->registerPing(new NetworkPing(10, 'domain.com'));
 
 // Check if a web server correctly answers to HTTP requests every minute
-$daemon->registerPing(new HttpHeaderPing('http-domain', 60, 'http://domain.com'));
+$daemon->registerPing(new HttpHeaderPing(60, 'http://domain.com'));
 
 // Check every day that your web server's certificate won't expire during the next week
-$daemon->registerPing(new TlsCertificateExpirationPing('certificate-domain', 86400, 'ssl://domain.com:443', '+7 days'));
+$daemon->registerPing(new TlsCertificateExpirationPing(86400, 'ssl://domain.com:443', '+7 days'));
 
 // Otherwise send an email to alert an admin
 $daemon->registerAlarm(new PhpEmailAlarm('your@email.com'));

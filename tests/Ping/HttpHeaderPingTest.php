@@ -7,7 +7,7 @@ class HttpHeaderPingTest extends PHPUnit_Framework_TestCase
     public function testHeaders()
     {
         $ping = $this->getMockBuilder('MarcBP\PingThis\Ping\HttpHeaderPing')
-            ->setConstructorArgs(['test', 0, 'http://test', 200])
+            ->setConstructorArgs([0, 'http://test', 200])
             ->setMethods(['getHeaders'])
             ->getMock();
         

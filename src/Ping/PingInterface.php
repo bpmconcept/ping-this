@@ -5,12 +5,6 @@ namespace MarcBP\PingThis\Ping;
 interface PingInterface
 {
     /**
-     * Returns a descriptive name for this ping. This name is used by the alarm
-     * to allow the end user to identify which ping failed in case of an alarm.
-     */
-    public function getName();
-
-    /**
      * Returns a string describing the last error, ie. the reason of the last
      * false response of ping().
      */
