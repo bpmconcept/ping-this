@@ -14,6 +14,6 @@ class DefaultFormatter implements FormatterInterface
             $subject = $newAlarm ? 'alarm triggered' : 'end of alarm';
         }
 
-        return sprintf('[%s][%s] %s', $date->format('Y-m-d H:i:s'), $ping->getName(), $subject);
+        return sprintf('[%s] %s', $date->format('Y-m-d H:i:s'), $subject);
     }
 }

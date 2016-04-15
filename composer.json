@@ -8,10 +8,12 @@
         }
     ],
     "require-dev": {
-        "geerlingguy/ping": "~1.0"
+        "geerlingguy/ping": "~1.0",
+        "herzult/php-ssh": "~1.1"
     },
 	"suggest": {
-		"geerlingguy/ping": "Required by NetworkPing"
+		"geerlingguy/ping": "Required by NetworkPing",
+        "herzult/php-ssh": "Required by SshCommandPing"
 	},
     "autoload": {
         "psr-4": {
