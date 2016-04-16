@@ -11,8 +11,8 @@
         "geerlingguy/ping": "~1.0",
         "herzult/php-ssh": "~1.1"
     },
-	"suggest": {
-		"geerlingguy/ping": "Required by NetworkPing",
+    "suggest": {
+        "geerlingguy/ping": "Required by NetworkPing",
         "herzult/php-ssh": "Required by SshCommandPing"
 	},
     "autoload": {
