@@ -2,27 +2,23 @@
 
 namespace PingThis\Ping;
 
-use Ssh\Configuration;
-use Ssh\SshConfigFileConfiguration;
-use Ssh\Authentication;
-use Ssh\Session;
+use PingThis\SshSession;
 
 class SshCommandPing extends AbstractPing
 {
+    protected $session;
     protected $command;
     protected $expected;
-    protected $session;
     protected $response;
     protected $error;
     
-	public function __construct($frequency, $command, $expected = null, $configuration, Authentication $authentication = null)
+	public function __construct($frequency, SshSession $session, $command, $expected = null)
     {
         parent::__construct($frequency);
         
+        $this->session = $session;
         $this->command = $command;
         $this->expected = $expected;
-		
-        $this->establishConnection($configuration, $authentication);
     }
 
 	public function setCommand($command)
@@ -43,7 +39,7 @@ class SshCommandPing extends AbstractPing
     public function ping()
 	{
 		try {
-            $this->response = $this->session->getExec()->run($this->command);
+            $this->response = $this->session->run($this->command);
         } catch (\Exception $e) {
             $this->error = $e->getMessage();
             return false;
@@ -57,19 +53,4 @@ class SshCommandPing extends AbstractPing
         
         return true;
 	}
-    
-    protected function establishConnection($configuration, $authentication)
-    {
-        // User has provided an hostname, build a configuration from the default config file path
-        if (is_string($configuration)) {
-            $configuration = new SshConfigFileConfiguration('~/.ssh/config', $configuration);
-        }
-        
-        // Extract authentication info from the config file
-        if ($authentication === null && $configuration instanceof SshConfigFileConfiguration) {
-            $authentication = $configuration->getAuthentication();
-        }
-        
-        $this->session = new Session($configuration, $authentication);
-    }
 }
