@@ -1,12 +1,12 @@
 <?php
 
-use MarcBP\PingThis\Ping\TlsCertificateExpirationPing;
+use PingThis\Ping\TlsCertificateExpirationPing;
 
 class TlsCertificateExpirationPingTest extends PHPUnit_Framework_TestCase
 {
     public function testExpirationDate()
     {
-        $ping = $this->getMockBuilder('MarcBP\PingThis\Ping\TlsCertificateExpirationPing')
+        $ping = $this->getMockBuilder('PingThis\Ping\TlsCertificateExpirationPing')
             ->setConstructorArgs([1, 'ssl://www.test.com:443', '+1 day'])
             ->setMethods(['getCertificateExpirationDate'])
             ->getMock();

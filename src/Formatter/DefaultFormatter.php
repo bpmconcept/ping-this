@@ -1,8 +1,8 @@
 <?php
 
-namespace MarcBP\PingThis\Formatter;
+namespace PingThis\Formatter;
 
-use MarcBP\PingThis\Ping\PingInterface;
+use PingThis\Ping\PingInterface;
 
 class DefaultFormatter implements FormatterInterface
 {

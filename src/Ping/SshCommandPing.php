@@ -1,6 +1,6 @@
 <?php
 
-namespace MarcBP\PingThis\Ping;
+namespace PingThis\Ping;
 
 use Ssh\Configuration;
 use Ssh\SshConfigFileConfiguration;

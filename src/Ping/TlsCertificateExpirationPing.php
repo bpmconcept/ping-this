@@ -1,6 +1,6 @@
 <?php
 
-namespace MarcBP\PingThis\Ping;
+namespace PingThis\Ping;
 
 /**
  * Check the expiration date of a web server's certificate. This ping needs

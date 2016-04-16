@@ -1,8 +1,8 @@
 <?php
 
-namespace MarcBP\PingThis\Alarm;
+namespace PingThis\Alarm;
 
-use MarcBP\PingThis\Ping\PingInterface;
+use PingThis\Ping\PingInterface;
 
 /**
  * Send an email for each alarm raised, using the PHP's mail function.

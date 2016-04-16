@@ -1,11 +1,11 @@
 <?php
 
-namespace MarcBP\PingThis;
+namespace PingThis;
 
-use MarcBP\PingThis\Ping\PingInterface;
-use MarcBP\PingThis\Alarm\AlarmInterface;
-use MarcBP\PingThis\Formatter\FormatterInterface;
-use MarcBP\PingThis\Formatter\DefaultFormatter;
+use PingThis\Ping\PingInterface;
+use PingThis\Alarm\AlarmInterface;
+use PingThis\Formatter\FormatterInterface;
+use PingThis\Formatter\DefaultFormatter;
 
 class Daemon
 {

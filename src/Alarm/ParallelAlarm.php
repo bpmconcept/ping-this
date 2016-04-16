@@ -1,8 +1,8 @@
 <?php
 
-namespace MarcBP\PingThis\Alarm;
+namespace PingThis\Alarm;
 
-use MarcBP\PingThis\Ping\PingInterface;
+use PingThis\Ping\PingInterface;
 
 /**
  * Dispatch the alert on multiple other Alarm instances.

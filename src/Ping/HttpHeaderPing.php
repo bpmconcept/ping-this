@@ -1,6 +1,6 @@
 <?php
 
-namespace MarcBP\PingThis\Ping;
+namespace PingThis\Ping;
 
 /**
  * Basically check (through headers only) if a web server answers correctly to

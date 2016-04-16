@@ -1,10 +1,10 @@
 <?php
 
-namespace MarcBP\PingThis\Alarm;
+namespace PingThis\Alarm;
 
-use MarcBP\PingThis\Formatter\FormatterInterface;
-use MarcBP\PingThis\Ping\PingInterface;
-use MarcBP\PingThis\Formatter\DefaultFormatter;
+use PingThis\Formatter\FormatterInterface;
+use PingThis\Ping\PingInterface;
+use PingThis\Formatter\DefaultFormatter;
 
 abstract class AbstractAlarm implements AlarmInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-use MarcBP\PingThis\Ping\NetworkPing;
+use PingThis\Ping\NetworkPing;
 
 class NetworkPingTest extends PHPUnit_Framework_TestCase
 {

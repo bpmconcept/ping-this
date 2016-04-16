@@ -1,8 +1,8 @@
 <?php
 
-use MarcBP\PingThis\Daemon;
-use MarcBP\PingThis\Ping\AbstractPing;
-use MarcBP\PingThis\Alarm\StreamAlarm;
+use PingThis\Daemon;
+use PingThis\Ping\AbstractPing;
+use PingThis\Alarm\StreamAlarm;
 
 class DaemonTest extends PHPUnit_Framework_TestCase
 {
@@ -10,11 +10,11 @@ class DaemonTest extends PHPUnit_Framework_TestCase
     {
         $daemon = new Daemon();
         
-        $ping = $this->getMockBuilder('MarcBP\PingThis\Ping\AbstractPing')
+        $ping = $this->getMockBuilder('PingThis\Ping\AbstractPing')
             ->setConstructorArgs([0])
             ->getMock();
         
-        $alarm = $this->getMockForAbstractClass('MarcBP\PingThis\Alarm\AbstractAlarm');
+        $alarm = $this->getMockForAbstractClass('PingThis\Alarm\AbstractAlarm');
         
         $daemon->registerAlarm($alarm);
         $daemon->registerPing($ping);

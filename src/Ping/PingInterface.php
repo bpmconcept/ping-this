@@ -1,6 +1,6 @@
 <?php
 
-namespace MarcBP\PingThis\Ping;
+namespace PingThis\Ping;
 
 interface PingInterface
 {
