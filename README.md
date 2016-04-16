@@ -7,10 +7,14 @@ PingThis is an extremely lightweight PHP 5.4+ tool to build a simple but functio
 ## Example
 
 ``` php
-use MarcBP\PingThis\Daemon;
-use MarcBP\PingThis\Alarm\PhpEmailAlarm;
-use MarcBP\PingThis\Ping\NetworkPing;
-use MarcBP\PingThis\Ping\HttpHeaderPing;
+use PingThis\Daemon;
+use PingThis\SshSession;
+use PingThis\Alarm\PhpEmailAlarm;
+use PingThis\Ping\NetworkPing;
+use PingThis\Ping\HttpHeaderPing;
+use PingThis\Ping\SshCommandPing;
+use PingThis\Ping\TlsCertificateExpirationPing;
+use PingThis\Matcher\LessThan;
 
 $daemon = new Daemon();
 
@@ -20,8 +24,13 @@ $daemon->registerPing(new NetworkPing(10, 'domain.com'));
 // Check if a web server correctly answers to HTTP requests every minute
 $daemon->registerPing(new HttpHeaderPing(60, 'http://domain.com'));
 
-// Check every day that your web server's certificate won't expire during the next week
+// Check every day that your certificate won't expire during the next week
 $daemon->registerPing(new TlsCertificateExpirationPing(86400, 'ssl://domain.com:443', '+7 days'));
+
+// Check that a remote script or command correctly returns through SSH
+$ssh = new SshSession('my.host.com');
+$daemon->registerPing(new SshCommandPing(60, $ssh, '~/monitoring.sh'));
+$daemon->registerPing(new SshCommandPing(60, $ssh, 'cat /proc/loadavg | cut -d' ' -f1', new LessThan(4));
 
 // Otherwise send an email to alert an admin
 $daemon->registerAlarm(new PhpEmailAlarm('your@email.com'));
@@ -44,7 +53,7 @@ Name                            | Description
 NetworkPing                     | A standard ICMP ping, or, failing that, an attempt to open a socket on a specified port
 HttpHeaderPing                  | Check through headers only if a web server answers correctly to a GET request
 TlsCertificateExpirationPing    | Check the expiration date of a web server's certificate
-SshCommandPing                  | Run a custom command through SSH [**todo**]
+SshCommandPing                  | Run a custom command through SSH and check either exit code or response content
 
 ### Built-in Alarms
 

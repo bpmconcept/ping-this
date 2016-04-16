@@ -14,6 +14,13 @@ class SshCommandPing extends AbstractPing
     protected $code;
     protected $error;
     
+	/**
+	 * @param $frequency                         
+	 * @param SshSession $session                A shared SSH connection
+	 * @param $command                           Command to execute on the remote host
+	 * @param [MatcherInterface $matcher = null] A matcher instance to check command response,
+	 *                                           or null if you just want to check the exit code
+	 */
 	public function __construct($frequency, SshSession $session, $command, MatcherInterface $matcher = null)
     {
         parent::__construct($frequency);
@@ -47,10 +54,10 @@ class SshCommandPing extends AbstractPing
             $this->code = $e->getCode();
         }
         
-        // No matcher provided: check the response code
+        // No matcher provided: check the exit code
         if ($this->matcher === null) {
             if ($this->code !== 0) {
-                $this->error = sprintf('Incorrect response code %d from the server', $this->code);
+                $this->error = sprintf('Incorrect exit code %d from the server', $this->code);
                 return false;
             }
             
