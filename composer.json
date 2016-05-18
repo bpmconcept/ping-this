@@ -7,6 +7,9 @@
             "email": "marc.blancpatin@bpmconcept.com"
         }
     ],
+    "require": {
+        "symfony/expression-language": "^2.8"
+    },
     "require-dev": {
         "geerlingguy/ping": "~1.0",
         "herzult/php-ssh": "~1.1"

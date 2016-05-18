@@ -1,7 +1,6 @@
 <?php
 
 use PingThis\Daemon;
-use PingThis\Matcher\GreaterThanOrEqual;
 use PingThis\Ping\SshCommandPing;
 
 class SshCommandPingTest extends PHPUnit_Framework_TestCase
@@ -18,7 +17,7 @@ class SshCommandPingTest extends PHPUnit_Framework_TestCase
             ->with('command')
             ->will($this->onConsecutiveCalls('41', '42', '43', '40'));
         
-        $ping = new SshCommandPing(1, $session, 'command', new GreaterThanOrEqual(42));
+        $ping = new SshCommandPing(1, $session, 'command', 'status == 0 and stdout >= 42');
 
         $this->assertFalse($ping->ping());
         $this->assertTrue($ping->ping());

@@ -4,6 +4,13 @@ namespace PingThis\Ping;
 
 use JJG\Ping;
 
+/**
+ * Check if a given host responds to a standard network ping. For systems
+ * that do not allow calls to system's ping executable, a socket replacement
+ * method may be used.
+ *
+ * @todo Use ExpressionLanguage for access to latency info
+ */
 class NetworkPing extends AbstractPing
 {
 	const METHOD_SYSTEM_PING = 'exec';

@@ -5,6 +5,8 @@ namespace PingThis\Ping;
 /**
  * Check the expiration date of a web server's certificate. This ping needs
  * the openssl module to be installed.
+ *
+ * @todo Use ExpressionLanguage for date comparison and more
  */
 class TlsCertificateExpirationPing extends AbstractPing
 {

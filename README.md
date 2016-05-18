@@ -14,7 +14,6 @@ use PingThis\Ping\NetworkPing;
 use PingThis\Ping\HttpHeaderPing;
 use PingThis\Ping\SshCommandPing;
 use PingThis\Ping\TlsCertificateExpirationPing;
-use PingThis\Matcher\LessThan;
 
 $daemon = new Daemon();
 
@@ -29,8 +28,8 @@ $daemon->registerPing(new TlsCertificateExpirationPing(86400, 'ssl://domain.com:
 
 // Check that a remote script or command correctly returns through SSH
 $ssh = new SshSession('my.host.com');
-$daemon->registerPing(new SshCommandPing(60, $ssh, '~/monitoring.sh'));
-$daemon->registerPing(new SshCommandPing(60, $ssh, 'cat /proc/loadavg | cut -d' ' -f1', new LessThan(4));
+$daemon->registerPing(new SshCommandPing(60, $ssh, '~/monitoring.sh', 'status == 0'));
+$daemon->registerPing(new SshCommandPing(60, $ssh, 'cat /proc/loadavg | cut -d" " -f1', 'stdout < 4');
 
 // Otherwise send an email to alert an admin
 $daemon->registerAlarm(new PhpEmailAlarm('your@email.com'));
@@ -44,7 +43,9 @@ PingThis aims to provide a simple and effective way for monitoring whatever your
 Configure a daemon with one Alarm and one or multiple Pings. The Daemon periodically
 verifies each Ping and, in case of failing, triggers the Alarm. Any class could act
 like an Alarm or a Ping, provided that it implements respectively the `AlarmInterface`
-or the `PingInterface`.
+or the `PingInterface`. The different built-in Pings rely on Symfony's
+[Expression Language Component](http://symfony.com/doc/2.8/components/expression_language/syntax.html)
+to allow a quick and easy construction of triggering logic.
 
 ### Built-in Pings
 
@@ -53,7 +54,7 @@ Name                            | Description
 NetworkPing                     | A standard ICMP ping, or, failing that, an attempt to open a socket on a specified port
 HttpHeaderPing                  | Check through headers only if a web server answers correctly to a GET request
 TlsCertificateExpirationPing    | Check the expiration date of a web server's certificate
-SshCommandPing                  | Run a custom command through SSH and check either exit code or response content
+SshCommandPing                  | Run a custom command through SSH and check either stdout, stderr or exit code
 
 ### Built-in Alarms
 
