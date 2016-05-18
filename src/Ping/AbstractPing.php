@@ -25,6 +25,22 @@ abstract class AbstractPing implements PingInterface
     
     protected function evaluate($expression, $data)
     {
-        return (bool) $this->language->evaluate($expression, $data);
+        // User passed a callable
+        if (is_callable($expression)) {
+            $reflection = new \ReflectionFunction($expression);
+            $parameters = $reflection->getNumberOfParameters();
+            
+            // Use has provided a callable with too much parameters
+            if ($parameters > count($data)) {
+                throw new \InvalidArgumentException(sprintf('A callable with %d parameters at most was expected', count($data)));
+            }
+            
+            return (bool) call_user_func_array($expression, array_slice($data, 0, $parameters));
+        }
+        
+        // User passed a string, we assume that it is an expression for ExpressionLanguage
+        if (is_string($expression)) {
+            return (bool) $this->language->evaluate($expression, $data);
+        }
     }
 }

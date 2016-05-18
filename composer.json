@@ -12,11 +12,13 @@
     },
     "require-dev": {
         "geerlingguy/ping": "~1.0",
-        "herzult/php-ssh": "~1.1"
+        "herzult/php-ssh": "~1.1",
+        "fabpot/goutte": "~3.1"
     },
     "suggest": {
         "geerlingguy/ping": "Required by NetworkPing",
-        "herzult/php-ssh": "Required by SshCommandPing"
+        "herzult/php-ssh": "Required by SshCommandPing",
+        "fabpot/goutte": "Required by ScraperPing"
 	},
     "autoload": {
         "psr-4": {
