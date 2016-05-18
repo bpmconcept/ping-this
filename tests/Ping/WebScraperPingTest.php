@@ -1,14 +1,14 @@
 <?php
 
-use PingThis\Ping\ScraperPing;
+use PingThis\Ping\WebScraperPing;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\DomCrawler\Crawler;
 
-class ScraperPingTest extends PHPUnit_Framework_TestCase
+class WebScraperPingTest extends PHPUnit_Framework_TestCase
 {
     public function testScraperResponseOnly()
     {
-        $ping = $this->getMockBuilder('PingThis\Ping\ScraperPing')
+        $ping = $this->getMockBuilder('PingThis\Ping\WebScraperPing')
             ->setConstructorArgs([0, 'GET', 'https://www.google.com', function (Response $response) {
                 return $response->getStatus() == 200;
             }])
@@ -28,7 +28,7 @@ class ScraperPingTest extends PHPUnit_Framework_TestCase
     
     public function testScraperResponseAndCrawler()
     {
-        $ping = $this->getMockBuilder('PingThis\Ping\ScraperPing')
+        $ping = $this->getMockBuilder('PingThis\Ping\WebScraperPing')
             ->setConstructorArgs([0, 'GET', 'https://www.google.com', function (Response $response, Crawler $crawler) {
                 return $crawler !== null && $response->getStatus() == 200;
             }])
@@ -48,7 +48,7 @@ class ScraperPingTest extends PHPUnit_Framework_TestCase
     
     public function testScraperExpression()
     {
-        $ping = $this->getMockBuilder('PingThis\Ping\ScraperPing')
+        $ping = $this->getMockBuilder('PingThis\Ping\WebScraperPing')
             ->setConstructorArgs([0, 'GET', 'https://www.google.com', 'response.getStatus() == 200 and crawler != null'])
             ->setMethods(['doRequest'])
             ->getMock();
@@ -66,7 +66,7 @@ class ScraperPingTest extends PHPUnit_Framework_TestCase
     
     public function testScraperError()
     {
-        $ping = $this->getMockBuilder('PingThis\Ping\ScraperPing')
+        $ping = $this->getMockBuilder('PingThis\Ping\WebScraperPing')
             ->setConstructorArgs([0, 'GET', 'https://www.google.com', function (Response $response, Crawler $crawler, &$error) {
                 $error = $response->getContent();
                 return false;

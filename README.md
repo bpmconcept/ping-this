@@ -11,7 +11,7 @@ use PingThis\Daemon;
 use PingThis\SshSession;
 use PingThis\Alarm\PhpEmailAlarm;
 use PingThis\Ping\NetworkPing;
-use PingThis\Ping\HttpHeaderPing;
+use PingThis\Ping\WebScraperPing;
 use PingThis\Ping\SshCommandPing;
 use PingThis\Ping\TlsCertificateExpirationPing;
 
@@ -21,7 +21,7 @@ $daemon = new Daemon();
 $daemon->registerPing(new NetworkPing(10, 'domain.com'));
 
 // Monitor the content of a website, through HTTP response and HTML/XML DOM inspection
-$daemon->registerPing(new ScraperPing(60, 'GET', 'http://www.domain.com', function ($response, $crawler) {
+$daemon->registerPing(new WebScraperPing(60, 'GET', 'http://www.domain.com', function ($response, $crawler) {
     return $response->getStatus() === 200 && $crawler->filter('.css-element')->text() === 'ok';
 }));
 
@@ -55,7 +55,7 @@ Name                            | Description
 :------------------------------ | :---------------------------------------------------------------------------------------
 NetworkPing                     | A standard ICMP ping, or, failing that, an attempt to open a socket on a specified port
 HttpHeaderPing                  | Check through headers only if a web server answers correctly to a GET request
-ScraperPing                     | Send a HTTP request and get back a [Response](http://api.symfony.com/2.8/Symfony/Component/BrowserKit/Response.html), along with a [Crawler](http://symfony.com/doc/2.8/components/dom_crawler.html) instance
+WebScraperPing                  | Send a HTTP request and get back a [Response](http://api.symfony.com/2.8/Symfony/Component/BrowserKit/Response.html), along with a [Crawler](http://symfony.com/doc/2.8/components/dom_crawler.html) instance
 TlsCertificateExpirationPing    | Check the expiration date of a web server's certificate
 SshCommandPing                  | Run a custom command through SSH and check either stdout, stderr or exit code
 

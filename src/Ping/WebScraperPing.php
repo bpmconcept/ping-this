@@ -4,7 +4,7 @@ namespace PingThis\Ping;
 
 use Goutte\Client;
 
-class ScraperPing extends AbstractPing
+class WebScraperPing extends AbstractPing
 {
     protected $client;
     protected $error;
