@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/marcbp/ping-this.svg?branch=master)](https://travis-ci.org/marcbp/ping-this)
 
-PingThis is an extremely lightweight PHP 5.4+ tool to build a simple but functional headless monitoring system.
+PingThis is an extremely lightweight PHP 5.5+ tool to build a simple but functional headless monitoring system.
 
 ## Example
 
