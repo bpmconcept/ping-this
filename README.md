@@ -54,7 +54,6 @@ to allow a quick and easy construction of triggering logic.
 Name                            | Description
 :------------------------------ | :---------------------------------------------------------------------------------------
 NetworkPing                     | A standard ICMP ping, or, failing that, an attempt to open a socket on a specified port
-HttpHeaderPing                  | Check through headers only if a web server answers correctly to a GET request
 WebScraperPing                  | Send a HTTP request and get back a [Response](http://api.symfony.com/2.8/Symfony/Component/BrowserKit/Response.html), along with a [Crawler](http://symfony.com/doc/2.8/components/dom_crawler.html) instance
 TlsCertificateExpirationPing    | Check the expiration date of a web server's certificate
 SshCommandPing                  | Run a custom command through SSH and check either stdout, stderr or exit code
