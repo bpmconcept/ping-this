@@ -25,6 +25,10 @@ $daemon->registerPing(new WebScraperPing(60, 'GET', 'http://www.domain.com', fun
     return $response->getStatus() === 200 && $crawler->filter('.css-element')->text() === 'ok';
 }));
 
+// Or equivalently :
+$expression = 'response.getStatus() == 200 and crawler.filter(".css-element").text() == "ok"';
+$daemon->registerPing(new WebScraperPing(60, 'GET', 'http://www.domain.com', $expression));
+
 // Check that a remote script or command correctly returns through SSH
 $ssh = new SshSession('my.host.com');
 $daemon->registerPing(new SshCommandPing(60, $ssh, '~/monitoring.sh', 'status == 0'));
