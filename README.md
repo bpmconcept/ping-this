@@ -20,16 +20,18 @@ $daemon = new Daemon();
 // Check if the host correctly answers to ping every 10 seconds
 $daemon->registerPing(new NetworkPing(10, 'domain.com'));
 
-// Check if a web server correctly answers to HTTP requests every minute
-$daemon->registerPing(new HttpHeaderPing(60, 'http://domain.com'));
-
-// Check every day that your certificate won't expire during the next week
-$daemon->registerPing(new TlsCertificateExpirationPing(86400, 'ssl://domain.com:443', '+7 days'));
+// Monitor the content of a website, through HTTP response and HTML/XML DOM inspection
+$daemon->registerPing(new ScraperPing(60, 'GET', 'http://www.domain.com', function ($response, $crawler) {
+    return $response->getStatus() === 200 && $crawler->filter('.css-element')->text() === 'ok';
+}));
 
 // Check that a remote script or command correctly returns through SSH
 $ssh = new SshSession('my.host.com');
 $daemon->registerPing(new SshCommandPing(60, $ssh, '~/monitoring.sh', 'status == 0'));
 $daemon->registerPing(new SshCommandPing(60, $ssh, 'cat /proc/loadavg | cut -d" " -f1', 'stdout < 4');
+
+// Check every day that your certificate won't expire during the next week
+$daemon->registerPing(new TlsCertificateExpirationPing(86400, 'ssl://domain.com:443', '+7 days'));
 
 // Otherwise send an email to alert an admin
 $daemon->registerAlarm(new PhpEmailAlarm('your@email.com'));
@@ -53,6 +55,7 @@ Name                            | Description
 :------------------------------ | :---------------------------------------------------------------------------------------
 NetworkPing                     | A standard ICMP ping, or, failing that, an attempt to open a socket on a specified port
 HttpHeaderPing                  | Check through headers only if a web server answers correctly to a GET request
+ScraperPing                     | Send a HTTP request and get back a [Response](http://api.symfony.com/2.8/Symfony/Component/BrowserKit/Response.html), along with a [Crawler](http://symfony.com/doc/2.8/components/dom_crawler.html) instance
 TlsCertificateExpirationPing    | Check the expiration date of a web server's certificate
 SshCommandPing                  | Run a custom command through SSH and check either stdout, stderr or exit code
 
