@@ -20,14 +20,14 @@ $daemon = new Daemon();
 // Check if the host correctly answers to ping every 10 seconds
 $daemon->registerPing(new NetworkPing(10, 'domain.com'));
 
-// Monitor the content of a website, through HTTP response and HTML/XML DOM inspection
-$daemon->registerPing(new WebScraperPing(60, 'GET', 'http://www.domain.com', function ($response, $crawler) {
-    return $response->getStatus() === 200 && $crawler->filter('.css-element')->text() === 'ok';
-}));
+// Check if a webserver responds correctly to a HTTP request every 30 seconds
+$daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', 'response.getStatus() == 200'));
+$daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', 'crawler.filter(".css").count()'));
 
-// Or equivalently :
-$expression = 'response.getStatus() == 200 and crawler.filter(".css-element").text() == "ok"';
-$daemon->registerPing(new WebScraperPing(60, 'GET', 'http://www.domain.com', $expression));
+// Or equivalently using any PHP callable
+$daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', function ($response, $crawler) {
+    return $response->getStatus() < 400 && $crawler->filter('.element')->text() === "Hello";
+}));
 
 // Check that a remote script or command correctly returns through SSH
 $ssh = new SshSession('my.host.com');
@@ -45,13 +45,14 @@ $daemon->run();
 
 ## Quick description
 
-PingThis aims to provide a simple and effective way for monitoring whatever your want.
+PingThis aims to provide a simple and effective way for monitoring whatever you want.
 Configure a daemon with one Alarm and one or multiple Pings. The Daemon periodically
 verifies each Ping and, in case of failing, triggers the Alarm. Any class could act
 like an Alarm or a Ping, provided that it implements respectively the `AlarmInterface`
 or the `PingInterface`. The different built-in Pings rely on Symfony's
 [Expression Language Component](http://symfony.com/doc/2.8/components/expression_language/syntax.html)
-to allow a quick and easy construction of triggering logic.
+to allow a quick and easy construction of triggering logic but can be equivalently replaced
+by a PHP callable.
 
 ### Built-in Pings
 
