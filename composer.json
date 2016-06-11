@@ -19,7 +19,7 @@
     "suggest": {
         "geerlingguy/ping": "Required by NetworkPing",
         "herzult/php-ssh": "Required by SshCommandPing",
-        "fabpot/goutte": "Required by ScraperPing"
+        "fabpot/goutte": "Required by WebScraperPing"
 	},
     "autoload": {
         "psr-4": {

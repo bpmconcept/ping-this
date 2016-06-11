@@ -28,6 +28,10 @@ class WebScraperPing extends AbstractPing
      */
 	public function __construct($frequency, $method, $uri, $expression, array $parameters = [], array $files = [], array $server = [], $content = null)
     {
+        if (!class_exists('Goutte\\Client')) {
+			trigger_error('WebScraperPing requires "fabpot/goutte" package installed', E_USER_ERROR);
+		}
+        
         parent::__construct($frequency);
         
         $this->method = $method;
