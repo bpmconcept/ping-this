@@ -58,10 +58,11 @@ by a PHP callable.
 
 Name                            | Description
 :------------------------------ | :---------------------------------------------------------------------------------------
-NetworkPing                     | A standard ICMP ping, or, failing that, an attempt to open a socket on a specified port
-WebScraperPing                  | Send a HTTP request and get back a [Response](http://api.symfony.com/2.8/Symfony/Component/BrowserKit/Response.html), along with a [Crawler](http://symfony.com/doc/2.8/components/dom_crawler.html) instance
-TlsCertificateExpirationPing    | Check the expiration date of a web server's certificate
-SshCommandPing                  | Run a custom command through SSH and check either stdout, stderr or exit code
+NetworkPing                     | Sends a standard ICMP ping
+HttpPing                        | Sends a HTTP request and checks only the returned code
+WebScraperPing                  | Sends a HTTP request and get back a [Response](http://api.symfony.com/2.8/Symfony/Component/BrowserKit/Response.html), along with a [Crawler](http://symfony.com/doc/2.8/components/dom_crawler.html) instance
+TlsCertificateExpirationPing    | Checks the expiration date of a web server's certificate
+SshCommandPing                  | Runs a custom command through SSH and checks either stdout, stderr or exit code
 
 ### Built-in Alarms
 
