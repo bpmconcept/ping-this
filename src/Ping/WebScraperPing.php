@@ -54,6 +54,11 @@ class WebScraperPing extends AbstractPing
 	{
 		$this->uri = $uri;
 	}
+    
+    public function getName()
+    {
+        return sprintf('HTTP %s request on %s', $this->method, $this->uri);
+    }
 
     public function getLastError()
 	{

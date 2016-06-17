@@ -45,6 +45,11 @@ class NetworkPing extends AbstractPing
 	{
 		$this->method = $method;
 	}
+    
+    public function getName()
+    {
+        return sprintf('Ping request on %s', $this->ping->getHost());
+    }
 
     public function getLastError()
 	{

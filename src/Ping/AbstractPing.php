@@ -19,10 +19,7 @@ abstract class AbstractPing implements PingInterface
     {
         return $this->frequency;
     }
-    
-    abstract public function getLastError();
-    abstract public function ping();
-    
+  
     protected function evaluate($expression, $data)
     {
         // User passed a callable

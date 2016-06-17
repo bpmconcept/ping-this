@@ -15,6 +15,12 @@ interface PingInterface
      * regular, particularly if some other pings are slow.
      */
     public function getPingFrequency();
+    
+    /**
+     * Returns a short but descriptive string which describes the test that is
+     * going to be done.
+     */
+    public function getName();
 
     /**
      * Indicates if this ping succeeded or failed by returning respectively true

@@ -9,6 +9,7 @@ use PingThis\Formatter\DefaultFormatter;
 
 class Daemon
 {
+    protected $debug;
     protected $alarm;
     protected $pings = [];
     protected $lastCheck;
@@ -16,9 +17,15 @@ class Daemon
 
     public function __construct()
     {
+        $this->debug = false;
         $this->lastCheck = new \SplObjectStorage();
         $this->inErrorState = new \SplObjectStorage();
         $this->formatter = new DefaultFormatter();
+    }
+    
+    public function enableDebugMode($debug)
+    {
+        $this->debug = $debug;
     }
 
     public function registerPing(PingInterface $ping)
@@ -45,8 +52,13 @@ class Daemon
             if ((time() - $this->lastCheck[$ping]) >= $ping->getPingFrequency()) {
                 $this->lastCheck[$ping] = time();
 
+                // Check if correctly pings
+                $this->log(sprintf('Checking "%s"... ', $ping->getName()));
+                $test = $ping->ping();
+                $this->log($test ? "\033[32mOK\033[0m\n" : "\033[31mError\033[0m\n");
+                
                 // This ping triggers an error
-                if (!$ping->ping()) {
+                if (!$test) {
                     if (!$this->inErrorState->contains($ping)) {
                         $this->inErrorState->attach($ping);
                         $this->alarm->start($ping);
@@ -67,6 +79,13 @@ class Daemon
         while (1) {
             $this->runOnce();
             sleep(1);
+        }
+    }
+    
+    protected function log($message)
+    {
+        if ($this->debug) {
+            printf($message);
         }
     }
 }

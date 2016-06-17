@@ -36,6 +36,11 @@ class TlsCertificateExpirationPing extends AbstractPing
         $this->threshold = $threshold;
     }
     
+    public function getName()
+    {
+        return sprintf('Certificate validity on %s', $this->socket);
+    }
+    
     public function getLastError()
 	{
 		return sprintf('Certificate expires on %s', $this->date->format('Y-m-d H:i:s'));
