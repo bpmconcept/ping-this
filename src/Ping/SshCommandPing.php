@@ -37,7 +37,7 @@ class SshCommandPing extends AbstractPing
     
     public function getName()
     {
-        return sprintf('Command %s on %s', $this->command, $session->getHost());
+        return sprintf('Command %s on %s', $this->command, $this->session->getConfiguration()->getHost());
     }
 
     public function getLastError()
