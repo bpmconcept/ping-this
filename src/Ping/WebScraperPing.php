@@ -37,7 +37,7 @@ class WebScraperPing extends AbstractPing
         $this->method = $method;
         $this->uri = $uri;
         $this->expression = $expression;
-        $this->parameters = $parameters;
+        $this->parameters = array_merge(['timeout' => 3], $parameters);
         $this->files = $files;
         $this->server = $server;
         $this->content = $content;
