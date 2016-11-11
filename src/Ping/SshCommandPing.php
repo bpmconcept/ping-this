@@ -42,7 +42,9 @@ class SshCommandPing extends AbstractPing
 
     public function getLastError()
     {
-        if ($this->status === 0) {
+        if (null !== $this->error) {
+            return $this->error;
+        } elseif ($this->status === 0) {
             return sprintf('Command returned "%s"', $this->stdout);
         } elseif (!$this->stderr) {
             return sprintf('Command exited with error %d', $this->status);
@@ -54,6 +56,7 @@ class SshCommandPing extends AbstractPing
     public function ping()
     {
         try {
+            $this->error = null;
             $this->stdout = $this->normalize($this->session->run($this->command));
             $this->status = 0;
         } catch (\RuntimeException $e) {
