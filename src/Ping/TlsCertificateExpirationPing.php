@@ -13,6 +13,7 @@ class TlsCertificateExpirationPing extends AbstractPing
 	protected $socket;
     protected $threshold;
     protected $date;
+    protected $error;
     
 	public function __construct($frequency, $socket, $threshold)
     {
@@ -43,21 +44,35 @@ class TlsCertificateExpirationPing extends AbstractPing
     
     public function getLastError()
 	{
-		return sprintf('Certificate expires on %s', $this->date->format('Y-m-d H:i:s'));
+		return $this->error;
 	}
 
     public function ping()
 	{
-        $this->date = $this->getCertificateExpirationDate($this->socket);
-        
-		return $this->date > new \DateTime($this->threshold);
+        try {
+            $this->date = $this->getCertificateExpirationDate($this->socket);
+            
+            if ($this->date < new \DateTime($this->threshold)) {
+                $this->error = sprintf('Certificate expires on %s', $this->date->format('Y-m-d H:i:s'));
+                return false;
+            }
+            
+            return true;
+        } catch (\RuntimeException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
 	}
     
     protected function getCertificateExpirationDate($socket)
     {
         $timeout = min(10, $this->getPingFrequency());
         $context = stream_context_create(['ssl' => ['capture_peer_cert' => TRUE]]);
-        $read = stream_socket_client($socket, $errno, $errstr, $timeout, STREAM_CLIENT_CONNECT, $context);
+        
+        if (false === ($read = @stream_socket_client($socket, $errno, $errstr, $timeout, STREAM_CLIENT_CONNECT, $context))) {
+            throw new \RuntimeException($errstr);
+        }
+        
         $certificate = stream_context_get_params($read);
         $infos = openssl_x509_parse($certificate['options']['ssl']['peer_certificate']);
         
