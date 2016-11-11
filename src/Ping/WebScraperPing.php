@@ -16,7 +16,7 @@ class WebScraperPing extends AbstractPing
     protected $server;
     protected $content;
     
-	/**
+    /**
      * @param $frequency       The request frequency
      * @param $method          The request method
      * @param $uri             The URI to fetch
@@ -26,11 +26,11 @@ class WebScraperPing extends AbstractPing
      * @param $server          The server parameters (HTTP headers are referenced with a HTTP_ prefix as PHP does)
      * @param $content         The raw body data
      */
-	public function __construct($frequency, $method, $uri, $expression, array $parameters = [], array $files = [], array $server = [], $content = null)
+    public function __construct($frequency, $method, $uri, $expression, array $parameters = [], array $files = [], array $server = [], $content = null)
     {
         if (!class_exists('Goutte\\Client')) {
-			trigger_error('WebScraperPing requires "fabpot/goutte" package installed', E_USER_ERROR);
-		}
+            trigger_error('WebScraperPing requires "fabpot/goutte" package installed', E_USER_ERROR);
+        }
         
         parent::__construct($frequency);
         
@@ -46,14 +46,14 @@ class WebScraperPing extends AbstractPing
     }
 
     public function setMethod($method)
-	{
-		$this->method = $method;
-	}
+    {
+        $this->method = $method;
+    }
     
-	public function setUri($uri)
-	{
-		$this->uri = $uri;
-	}
+    public function setUri($uri)
+    {
+        $this->uri = $uri;
+    }
     
     public function getName()
     {
@@ -61,13 +61,13 @@ class WebScraperPing extends AbstractPing
     }
 
     public function getLastError()
-	{
+    {
         return $this->error;
-	}
+    }
 
     public function ping()
-	{
-		try {
+    {
+        try {
             list($crawler, $response) = $this->doRequest();
             $this->error = null;
         } catch (\Exception $e) {
@@ -86,7 +86,7 @@ class WebScraperPing extends AbstractPing
         }
         
         return $ping;
-	}
+    }
     
     protected function doRequest()
     {

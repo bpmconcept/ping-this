@@ -10,27 +10,27 @@ namespace PingThis\Ping;
  */
 class TlsCertificateExpirationPing extends AbstractPing
 {
-	protected $socket;
+    protected $socket;
     protected $threshold;
     protected $date;
     protected $error;
     
-	public function __construct($frequency, $socket, $threshold)
+    public function __construct($frequency, $socket, $threshold)
     {
         if (!function_exists('openssl_x509_parse')) {
-			trigger_error('TlsCertificateExpirationPing requires the OpenSSL module', E_USER_ERROR);
-		}
+            trigger_error('TlsCertificateExpirationPing requires the OpenSSL module', E_USER_ERROR);
+        }
         
         parent::__construct($frequency);
         
-		$this->socket = $socket;
+        $this->socket = $socket;
         $this->threshold = $threshold;
     }
     
-	public function setSocket($socket)
-	{
-		$this->socket = $socket;
-	}
+    public function setSocket($socket)
+    {
+        $this->socket = $socket;
+    }
 
     public function setThreshold($threshold)
     {
@@ -43,12 +43,12 @@ class TlsCertificateExpirationPing extends AbstractPing
     }
     
     public function getLastError()
-	{
-		return $this->error;
-	}
+    {
+        return $this->error;
+    }
 
     public function ping()
-	{
+    {
         try {
             $this->date = $this->getCertificateExpirationDate($this->socket);
             
@@ -62,7 +62,7 @@ class TlsCertificateExpirationPing extends AbstractPing
             $this->error = $e->getMessage();
             return false;
         }
-	}
+    }
     
     protected function getCertificateExpirationDate($socket)
     {

@@ -14,14 +14,14 @@ class SshCommandPing extends AbstractPing
     protected $code;
     protected $error;
     
-	/**
-	 * @param $frequency                         
-	 * @param SshSession $session    A shared SSH connection
-	 * @param $command               Command to execute on the remote host
-	 * @param $expression            A conditional expression respecting Symfony's ExpressionLanguage syntax.
+    /**
+     * @param $frequency                         
+     * @param SshSession $session    A shared SSH connection
+     * @param $command               Command to execute on the remote host
+     * @param $expression            A conditional expression respecting Symfony's ExpressionLanguage syntax.
      *                               User has access to 3 variables: stdout, stderr and status.
-	 */
-	public function __construct($frequency, SshSession $session, $command, $expression = 'status == 0')
+     */
+    public function __construct($frequency, SshSession $session, $command, $expression = 'status == 0')
     {
         parent::__construct($frequency);
         
@@ -30,10 +30,10 @@ class SshCommandPing extends AbstractPing
         $this->expression = $expression;
     }
 
-	public function setCommand($command)
-	{
-		$this->command = $command;
-	}
+    public function setCommand($command)
+    {
+        $this->command = $command;
+    }
     
     public function getName()
     {
@@ -41,7 +41,7 @@ class SshCommandPing extends AbstractPing
     }
 
     public function getLastError()
-	{
+    {
         if ($this->status === 0) {
             return sprintf('Command returned "%s"', $this->stdout);
         } elseif (!$this->stderr) {
@@ -49,11 +49,11 @@ class SshCommandPing extends AbstractPing
         } else {
             return sprintf('Command exited with error %d, "%s"', $this->status, is_array($this->stderr) ? implode("\n", $this->stderr) : $this->stderr);
         }            
-	}
+    }
 
     public function ping()
-	{
-		try {
+    {
+        try {
             $this->stdout = $this->normalize($this->session->run($this->command));
             $this->status = 0;
         } catch (\RuntimeException $e) {
@@ -66,7 +66,7 @@ class SshCommandPing extends AbstractPing
             'stderr' => $this->stderr,
             'status' => $this->status,
         ]);
-	}
+    }
     
     protected function normalize($response)
     {
