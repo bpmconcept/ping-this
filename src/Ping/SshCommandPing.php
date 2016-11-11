@@ -65,6 +65,7 @@ class SshCommandPing extends AbstractPing
             'stdout' => $this->stdout,
             'stderr' => $this->stderr,
             'status' => $this->status,
+            'error' => &$this->error,
         ]);
     }
     
