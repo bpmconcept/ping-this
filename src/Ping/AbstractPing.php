@@ -24,7 +24,7 @@ abstract class AbstractPing implements PingInterface
     {
         // User passed a callable
         if (is_callable($expression)) {
-            $reflection = new \ReflectionFunction($expression);
+            $reflection = is_array($expression) ? new \ReflectionMethod($expression[0], $expression[1]) : new \ReflectionFunction($expression);
             $parameters = $reflection->getNumberOfParameters();
             
             // Use has provided a callable with too much parameters
