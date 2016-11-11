@@ -19,6 +19,11 @@ class SshSession
         return $this->session->getExec()->run($command);
     }
     
+    public function getSession()
+    {
+        return $this->session;
+    }
+    
     protected function establishConnection($configuration, $authentication)
     {
         // User has provided an hostname, build a configuration from the default config file path
