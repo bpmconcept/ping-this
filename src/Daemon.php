@@ -51,12 +51,16 @@ class Daemon
         foreach ($this->pings as $ping) {
             if ((time() - $this->lastCheck[$ping]) >= $ping->getPingFrequency()) {
                 $this->lastCheck[$ping] = time();
-
-                // Check if correctly pings
-                $this->log(sprintf('Checking "%s"... ', $ping->getName()));
-                $test = $ping->ping();
-                $this->log($test ? "\033[32mOK\033[0m\n" : "\033[31mError\033[0m\n");
                 
+                $attempts = 1;
+                
+                do {
+                    // Check if it correctly pings
+                    $this->log(sprintf('Checking "%s"... ', $ping->getName()));
+                    $test = $ping->ping();
+                    $this->log($test ? "\033[32mOK\033[0m\n" : "\033[31mError\033[0m\n");
+                } while (!$test && $attempts++ < $ping->getMaxAttemptsBeforeAlarm());
+                                
                 // This ping triggers an error
                 if (!$test) {
                     if (!$this->inErrorState->contains($ping)) {

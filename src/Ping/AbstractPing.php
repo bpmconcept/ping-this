@@ -7,17 +7,29 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 abstract class AbstractPing implements PingInterface
 {
     protected $frequency;
+    protected $attempts;
     protected $language;
     
     public function __construct($frequency)
     {
         $this->frequency = $frequency;
+        $this->attempts = 3;
         $this->language = new ExpressionLanguage();
     }
     
     public function getPingFrequency()
     {
         return $this->frequency;
+    }
+    
+    public function setMaxAttemptsBeforeAlarm($attempts)
+    {
+        $this->attempts = $attempts;
+    }
+    
+    public function getMaxAttemptsBeforeAlarm()
+    {
+        return $this->attempts;
     }
   
     protected function evaluate($expression, $data)

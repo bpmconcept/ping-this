@@ -17,6 +17,12 @@ interface PingInterface
     public function getPingFrequency();
     
     /**
+     * Returns the consecutive max number of attempts if the ping fails. Passed
+     * this number, the registered alarm is triggered.
+     */
+    public function getMaxAttemptsBeforeAlarm();
+    
+    /**
      * Returns a short but descriptive string which describes the test that is
      * going to be done.
      */

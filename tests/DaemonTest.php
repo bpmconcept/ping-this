@@ -11,21 +11,25 @@ class DaemonTest extends PHPUnit_Framework_TestCase
         $daemon = new Daemon();
         
         $ping = $this->getMockBuilder('PingThis\Ping\AbstractPing')
-            ->setConstructorArgs([0])
-            ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['ping'])
+            ->getMockForAbstractClass();
+        
         
         $alarm = $this->getMockForAbstractClass('PingThis\Alarm\AbstractAlarm');
         
         $daemon->registerAlarm($alarm);
         $daemon->registerPing($ping);
         
-        // Simulate a false ping
+        $ping->setMaxAttemptsBeforeAlarm(3);
+        
+        // Simulate a falsy ping
         $ping->expects($this->any())
              ->method('ping')
-             ->will($this->onConsecutiveCalls(true, false, true));
+             ->will($this->onConsecutiveCalls(true, false, true, false, false, true, false, false, false, true));
         
         // The alarm should be notified twice: 1 start, then 1 stop
-        $alarm->expects($this->once())
+        $alarm->expects($this->exactly(2))
              ->method('start')
              ->with($ping);
         
@@ -33,8 +37,8 @@ class DaemonTest extends PHPUnit_Framework_TestCase
              ->method('stop')
              ->with($ping);
         
-        $daemon->runOnce();
-        $daemon->runOnce();
-        $daemon->runOnce();
+        foreach (range(1, 10) as $i) {
+            $daemon->runOnce();
+        }
     }
 }
