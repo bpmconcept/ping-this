@@ -22,7 +22,7 @@ class DatabasePing extends AbstractPing
         $this->dsn = $dsn;
         $this->username = $username;
         $this->password = $password;
-        $this->options = $options;
+        $this->options = array_merge([\PDO::ATTR_TIMEOUT => 3], $options);
         
         parent::__construct($frequency);
     }
