@@ -13,6 +13,7 @@ use PingThis\Alarm\PhpEmailAlarm;
 use PingThis\Ping\NetworkPing;
 use PingThis\Ping\WebScraperPing;
 use PingThis\Ping\SshCommandPing;
+use PingThis\Ping\DatabasePing;
 use PingThis\Ping\TlsCertificateExpirationPing;
 
 $daemon = new Daemon();
@@ -36,6 +37,9 @@ $daemon->registerPing(new SshCommandPing(60, $ssh, 'cat /proc/loadavg | cut -d" 
 
 // Check every day that your certificate won't expire during the next week
 $daemon->registerPing(new TlsCertificateExpirationPing(86400, 'ssl://domain.com:443', '+7 days'));
+
+// Check if a remote SQL server is still up
+$daemon->registerPing(new DatabasePing(10, 'mysql:host=my.sql.server', 'login', 'password'));
 
 // Otherwise send an email to alert an admin
 $daemon->registerAlarm(new PhpEmailAlarm('your@email.com'));
@@ -63,7 +67,8 @@ HttpPing                        | Sends a HTTP request and checks only the retur
 WebScraperPing                  | Sends a HTTP request and get back a [Response](http://api.symfony.com/2.8/Symfony/Component/BrowserKit/Response.html), along with a [Crawler](http://symfony.com/doc/2.8/components/dom_crawler.html) instance
 TlsCertificateExpirationPing    | Checks the expiration date of a web server's certificate
 SshCommandPing                  | Runs a custom command through SSH and checks either stdout, stderr or exit code
-DatabasePing                    | Establishes a database connection using PDO
+DatabasePing                    | Establishes a connection to a database using PDO
+DatabaseQueryPing               | Executes a SQL query on a database using PDO
 
 ### Built-in Alarms
 
