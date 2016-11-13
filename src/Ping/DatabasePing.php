@@ -15,6 +15,10 @@ class DatabasePing extends AbstractPing
     
     public function __construct($frequency, $dsn, $username = null, $password = null, $options = [])
     {
+        if (!class_exists('PDO')) {
+            trigger_error('DatabasePing requires PDO', E_USER_ERROR);
+        }
+        
         $this->dsn = $dsn;
         $this->username = $username;
         $this->password = $password;
