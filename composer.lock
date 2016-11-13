@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c24a1cd4a1d5c54b4255a0c930607ba9",
-    "content-hash": "398f21fa48d9d342e240a7ffe169410e",
+    "hash": "a992d3c6a96c7beee6cfe32887314481",
+    "content-hash": "bc82ea11545882fdf256cf14202586e2",
     "packages": [
         {
             "name": "symfony/expression-language",
@@ -109,16 +109,16 @@
         },
         {
             "name": "geerlingguy/ping",
-            "version": "1.0.3",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/geerlingguy/Ping.git",
-                "reference": "f67ff9483be1977cde38e10f79c5ead2f96149c0"
+                "reference": "df6be89643b04d7fcd67a3470295e01ff6d77f72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/geerlingguy/Ping/zipball/f67ff9483be1977cde38e10f79c5ead2f96149c0",
-                "reference": "f67ff9483be1977cde38e10f79c5ead2f96149c0",
+                "url": "https://api.github.com/repos/geerlingguy/Ping/zipball/df6be89643b04d7fcd67a3470295e01ff6d77f72",
+                "reference": "df6be89643b04d7fcd67a3470295e01ff6d77f72",
                 "shasum": ""
             },
             "type": "library",
@@ -138,7 +138,7 @@
                 }
             ],
             "description": "A PHP class to ping hosts.",
-            "time": "2015-06-05 15:15:27"
+            "time": "2016-06-04 21:28:28"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -645,6 +645,8 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=5.5.0"
+    },
     "platform-dev": []
 }

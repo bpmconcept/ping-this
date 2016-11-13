@@ -29,11 +29,19 @@ class NetworkPing extends AbstractPing
         parent::__construct($frequency);
         $this->ping = new Ping($host);
         $this->method = self::METHOD_SYSTEM_PING;
+        
+        // Decrease default timeout
+        $this->ping->setTimeout(3);
     }
 
     public function setTtl($ttl)
     {
         $this->ping->setTtl($ttl);
+    }
+    
+    public function setTimeout($timeout)
+    {
+        $this->ping->setTimeout($timeout);
     }
 
     public function setPort($port)
