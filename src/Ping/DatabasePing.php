@@ -43,6 +43,7 @@ class DatabasePing extends AbstractPing
             new \PDO($this->dsn, $this->username, $this->password, $this->options);
             return true;
         } catch (\PDOException $e) {
+            var_dump($e);
             $this->error = sprintf('Database %s connection error "%s"', $this->dsn, $e->getMessage());
             return false;
         }
