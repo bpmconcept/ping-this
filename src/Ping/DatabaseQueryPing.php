@@ -26,7 +26,7 @@ class DatabaseQueryPing extends AbstractPing
         $this->expression = $expression;
         $this->username = $username;
         $this->password = $password;
-        $this->options = array_merge([\PDO::ATTR_TIMEOUT => 3], $options);
+        $this->options = $options;
         
         parent::__construct($frequency);
     }
