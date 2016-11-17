@@ -7,6 +7,7 @@ before_script:
   - sudo apt-get -qq update
   - sudo apt-get install -y -qq libssh2-1-dev libssh2-php
   - touch /tmp/ignore
-  - pecl install -f ssh2-0.13 < /tmp/ignore
+  - if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then pecl install -f ssh2-0.13 < /tmp/ignore; fi
+  - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then pecl install -f ssh2-1.0 < /tmp/ignore; fi
   - php -m | grep ssh2
   - composer install --dev
