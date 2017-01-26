@@ -10,7 +10,6 @@ use PingThis\Ping\PingInterface;
 class PhpEmailAlarm extends AbstractAlarm
 {
     protected $email;
-    protected $subject;
 
     public function __construct($email)
     {
@@ -19,11 +18,19 @@ class PhpEmailAlarm extends AbstractAlarm
 
     public function start(PingInterface $ping)
     {
-        @mail($this->email, $this->formatStartMessage($ping), $error);
+        $date = new \DateTime();
+        $subject = $this->formatter->formatShortErrorMessage($date, $ping, true);
+        $message = $this->formatter->formatFullErrorMessage($date, $ping, true);
+            
+        mail($this->email, sprintf('=?UTF-8?B?%s?=', base64_encode($subject)), $message);
     }
 
     public function stop(PingInterface $ping)
     {
-        @mail($this->email, $this->formatEndMessage($ping), $error);
+        $date = new \DateTime();
+        $subject = $this->formatter->formatShortErrorMessage($date, $ping, true);
+        $message = $this->formatter->formatFullErrorMessage($date, $ping, true);
+        
+        mail($this->email, sprintf('=?UTF-8?B?%s?=', base64_encode($subject)), $message);
     }
 }

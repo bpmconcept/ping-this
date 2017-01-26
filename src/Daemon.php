@@ -4,8 +4,6 @@ namespace PingThis;
 
 use PingThis\Ping\PingInterface;
 use PingThis\Alarm\AlarmInterface;
-use PingThis\Formatter\FormatterInterface;
-use PingThis\Formatter\DefaultFormatter;
 
 class Daemon
 {
@@ -20,7 +18,6 @@ class Daemon
         $this->debug = false;
         $this->lastCheck = new \SplObjectStorage();
         $this->inErrorState = new \SplObjectStorage();
-        $this->formatter = new DefaultFormatter();
     }
     
     public function enableDebugMode($debug)
@@ -37,13 +34,6 @@ class Daemon
     public function registerAlarm(AlarmInterface $alarm)
     {
         $this->alarm = $alarm;
-        $this->alarm->setFormatter($this->formatter);
-    }
-
-    public function setFormatter(FormatterInterface $formatter)
-    {
-        $this->formatter = $formatter;
-        $this->alarm->setFormatter($this->formatter);
     }
     
     public function runOnce()

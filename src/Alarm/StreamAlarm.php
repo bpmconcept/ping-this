@@ -16,11 +16,17 @@ class StreamAlarm extends AbstractAlarm
 
     public function start(PingInterface $ping)
     {
-        fwrite($this->stream, $this->formatStartMessage($ping) . PHP_EOL);
+        $date = new \DateTime();
+        $message = $this->formatter->formatShortErrorMessage($date, $ping, true);
+        
+        fwrite($this->stream, $message . PHP_EOL);
     }
 
     public function stop(PingInterface $ping)
     {
-        fwrite($this->stream, $this->formatEndMessage($ping) . PHP_EOL);
+        $date = new \DateTime();
+        $message = $this->formatter->formatShortErrorMessage($date, $ping, false);
+        
+        fwrite($this->stream, $message . PHP_EOL);
     }
 }

@@ -6,14 +6,23 @@ use PingThis\Ping\PingInterface;
 
 class DefaultFormatter implements FormatterInterface
 {
-    public function formatErrorMessage(\DateTime $date, PingInterface $ping, $newAlarm)
+    public function formatShortErrorMessage(\DateTime $date, PingInterface $ping, $newAlarm)
     {
-        if ($newAlarm && $error = $ping->getLastError()) {
-            $subject = $error;
-        } else {
-            $subject = $newAlarm ? 'alarm triggered' : 'end of alarm';
+        if ($newAlarm) {
+            return sprintf("%s failed", $ping->getName());
         }
-
-        return sprintf('[%s] %s', $date->format('Y-m-d H:i:s'), $subject);
+        
+        else {
+            return sprintf("%s is working again", $ping->getName());
+        }
+    }
+    
+    public function formatFullErrorMessage(\DateTime $date, PingInterface $ping, $newAlarm)
+    {
+        if (!$newAlarm) {
+            return "";
+        }
+        
+        return $ping->getLastError();
     }
 }
