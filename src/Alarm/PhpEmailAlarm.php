@@ -28,8 +28,8 @@ class PhpEmailAlarm extends AbstractAlarm
     public function stop(PingInterface $ping)
     {
         $date = new \DateTime();
-        $subject = $this->formatter->formatShortErrorMessage($date, $ping, true);
-        $message = $this->formatter->formatFullErrorMessage($date, $ping, true);
+        $subject = $this->formatter->formatShortErrorMessage($date, $ping, false);
+        $message = $this->formatter->formatFullErrorMessage($date, $ping, false);
         
         mail($this->email, sprintf('=?UTF-8?B?%s?=', base64_encode($subject)), $message);
     }
