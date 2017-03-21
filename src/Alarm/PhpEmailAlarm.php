@@ -10,10 +10,12 @@ use PingThis\Ping\PingInterface;
 class PhpEmailAlarm extends AbstractAlarm
 {
     protected $email;
-
-    public function __construct($email)
+    protected $headers;
+    
+    public function __construct($email, array $headers = [])
     {
         $this->email = $email;
+        $this->headers = $headers;
     }
 
     public function start(PingInterface $ping)
@@ -21,8 +23,8 @@ class PhpEmailAlarm extends AbstractAlarm
         $date = new \DateTime();
         $subject = $this->formatter->formatShortErrorMessage($date, $ping, true);
         $message = $this->formatter->formatFullErrorMessage($date, $ping, true);
-            
-        mail($this->email, sprintf('=?UTF-8?B?%s?=', base64_encode($subject)), $message);
+        
+        mail($this->email, sprintf('=?UTF-8?B?%s?=', base64_encode($subject)), $message, $this->getHeaders());
     }
 
     public function stop(PingInterface $ping)
@@ -31,6 +33,17 @@ class PhpEmailAlarm extends AbstractAlarm
         $subject = $this->formatter->formatShortErrorMessage($date, $ping, false);
         $message = $this->formatter->formatFullErrorMessage($date, $ping, false);
         
-        mail($this->email, sprintf('=?UTF-8?B?%s?=', base64_encode($subject)), $message);
+        mail($this->email, sprintf('=?UTF-8?B?%s?=', base64_encode($subject)), $message, $this->getHeaders());
+    }
+    
+    protected function getHeaders()
+    {
+        $headers = "";
+        
+        foreach (array_merge(['From' => 'PingThis'], $this->headers) as $k => $v) {
+            $headers .= "$k: $v\r\n";
+        }
+        
+        return $headers;
     }
 }
