@@ -4,7 +4,7 @@ use PingThis\Daemon;
 use PingThis\Ping\AbstractPing;
 use PingThis\Alarm\StreamAlarm;
 
-class DaemonTest extends PHPUnit_Framework_TestCase
+class DaemonTest extends \PHPUnit\Framework\TestCase
 {
     public function testAlarmStartAndStop()
     {

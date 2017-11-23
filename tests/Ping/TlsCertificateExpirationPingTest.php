@@ -2,7 +2,7 @@
 
 use PingThis\Ping\TlsCertificateExpirationPing;
 
-class TlsCertificateExpirationPingTest extends PHPUnit_Framework_TestCase
+class TlsCertificateExpirationPingTest extends \PHPUnit\Framework\TestCase
 {
     public function testExpirationDate()
     {

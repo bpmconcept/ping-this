@@ -2,7 +2,7 @@
 
 use PingThis\Ping\NetworkPing;
 
-class NetworkPingTest extends PHPUnit_Framework_TestCase
+class NetworkPingTest extends \PHPUnit\Framework\TestCase
 {
     public function testSystemPing()
     {

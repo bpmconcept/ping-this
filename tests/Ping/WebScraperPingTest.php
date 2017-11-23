@@ -4,7 +4,7 @@ use PingThis\Ping\WebScraperPing;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\DomCrawler\Crawler;
 
-class WebScraperPingTest extends PHPUnit_Framework_TestCase
+class WebScraperPingTest extends \PHPUnit\Framework\TestCase
 {
     public function testScraperResponseOnly()
     {

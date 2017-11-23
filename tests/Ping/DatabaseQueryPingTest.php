@@ -2,7 +2,7 @@
 
 use PingThis\Ping\DatabaseQueryPing;
 
-class DatabaseQueryPingTest extends PHPUnit_Framework_TestCase
+class DatabaseQueryPingTest extends \PHPUnit\Framework\TestCase
 {
     public function testPingExpression()
     {

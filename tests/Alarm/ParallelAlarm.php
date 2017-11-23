@@ -3,7 +3,7 @@
 use PingThis\Ping\NetworkPing;
 use PingThis\Alarm\ParallelAlarm;
 
-class ParallelAlarmTest extends PHPUnit_Framework_TestCase
+class ParallelAlarmTest extends \PHPUnit\Framework\TestCase
 {
     public function testDispatch()
     {

@@ -3,7 +3,7 @@
 use PingThis\Daemon;
 use PingThis\Ping\SshCommandPing;
 
-class SshCommandPingTest extends PHPUnit_Framework_TestCase
+class SshCommandPingTest extends \PHPUnit\Framework\TestCase
 {
     public function testResponseContent()
     {
