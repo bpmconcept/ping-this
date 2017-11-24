@@ -1,6 +1,6 @@
 # PingThis
 
-[![Build Status](https://travis-ci.org/marcbp/ping-this.svg?branch=master)](https://travis-ci.org/marcbp/ping-this)
+[![Build Status](https://travis-ci.org/bpmconcept/ping-this.svg?branch=master)](https://travis-ci.org/bpmconcept/ping-this)
 
 PingThis is a lightweight PHP 5.5+ tool to build simple but functional headless monitoring systems.
 
