@@ -60,6 +60,7 @@ class StreamSocketCommandPing extends AbstractPing
             return true;
         }
         
+        stream_set_timeout($stream, $this->timeout);
         fwrite($stream, $this->command);
         $response = stream_get_contents($stream);
         fclose($stream);
