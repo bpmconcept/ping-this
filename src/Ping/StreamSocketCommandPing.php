@@ -2,29 +2,29 @@
 
 namespace PingThis\Ping;
 
-class TcpCommandPing extends AbstractPing
+class StreamSocketCommandPing extends AbstractPing
 {
     protected $address;
-    protected $port;
+    protected $timeout;
     protected $command;
     protected $expression;
     protected $error;
     
     /**
      * @param $frequency                  
-     * @param $address        IP address to connect to
-     * @param $port           TCP port to use
+     * @param $socket         Socket address (see stream_socket_client)
      * @param $command        Command to send once connection is established
      * @param $expression     A conditional expression respecting Symfony's ExpressionLanguage syntax.
      *                        User has access to 1 variable: response.
+     * @param $timeout        Connection timeout
      */
-    public function __construct($frequency, $address, $port, $command = null, $expression = null)
+    public function __construct($frequency, $socket, $command = null, $expression = null, $timeout = 3)
     {
         parent::__construct($frequency);
         
-        $this->address = $address;
-        $this->port = $port;
+        $this->socket = $socket;
         $this->command = $command;
+        $this->timeout = $timeout;
         $this->expression = $expression;
     }
 
@@ -35,7 +35,7 @@ class TcpCommandPing extends AbstractPing
     
     public function getName()
     {
-        return sprintf('TCP request on %s:%d', $this->address, $this->port);
+        return sprintf('Stream socket request on %s', $this->socket);
     }
 
     public function getLastError()
@@ -49,28 +49,20 @@ class TcpCommandPing extends AbstractPing
 
     public function ping()
     {
-        if (!$socket = @socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) {
-            $this->error = socket_strerror(socket_last_error());
-            return false;
-        }
-        
-        if (!$result = @socket_connect($socket, gethostbyname($this->address), $this->port)) {
-            $this->error = sprintf('socket_connect failed: "%s"', socket_strerror(socket_last_error()));
+        if (!$stream = @stream_socket_client($this->socket, $errno, $errstr, $this->timeout)) {
+            $this->error = sprintf('Stream socket connection failed: "%s"', $errstr);
             return false;
         }
         
         // No command provided, test only connection success
         if (!$this->command) {
-            @socket_close($socket);
+            fclose($stream);
             return true;
         }
         
-        $response = '';
-        socket_write($socket, $this->command, strlen($this->command));
-        
-        while (($out = socket_read($socket, 2048)) !== "") {
-            $response .= $out;
-        }
+        fwrite($stream, $this->command);
+        $response = stream_get_contents($stream);
+        fclose($stream);
 
         return $this->evaluate($this->expression, [
             'response' => $response,

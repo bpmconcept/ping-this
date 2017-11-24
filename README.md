@@ -67,7 +67,7 @@ HttpPing                        | Sends a HTTP request and checks only the retur
 WebScraperPing                  | Sends a HTTP request and get back a [Response](http://api.symfony.com/2.8/Symfony/Component/BrowserKit/Response.html), along with a [Crawler](http://symfony.com/doc/2.8/components/dom_crawler.html) instance
 TlsCertificateExpirationPing    | Checks the expiration date of a web server's certificate
 SshCommandPing                  | Executes a custom command through SSH and checks either stdout, stderr or exit code
-TcpCommandPing                  | Sends a custom payload to a remote TCP server and checks the response
+StreamSocketCommandPing         | Sends a custom payload through a TCP/UDP/Unix socket and checks the response
 DatabasePing                    | Establishes a connection to a database using PDO
 DatabaseQueryPing               | Executes a SQL query on a database using PDO
 
