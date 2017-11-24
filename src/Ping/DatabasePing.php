@@ -22,7 +22,7 @@ class DatabasePing extends AbstractPing
         $this->dsn = $dsn;
         $this->username = $username;
         $this->password = $password;
-        $this->options = $options;
+        $this->options = array_merge([\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION], $options);
         
         parent::__construct($frequency);
     }
@@ -40,7 +40,7 @@ class DatabasePing extends AbstractPing
     public function ping()
     {
         try {
-            $pdo = new \PDO($this->dsn, $this->username, $this->password, $this->options);
+            @$pdo = new \PDO($this->dsn, $this->username, $this->password, $this->options);
             return true;
         } catch (\PDOException $e) {
             $this->error = sprintf('Database %s connection error "%s"', $this->dsn, $e->getMessage());

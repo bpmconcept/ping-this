@@ -26,7 +26,7 @@ class DatabaseQueryPing extends AbstractPing
         $this->expression = $expression;
         $this->username = $username;
         $this->password = $password;
-        $this->options = $options;
+        $this->options = array_merge([\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION], $options);
         
         parent::__construct($frequency);
     }
@@ -44,7 +44,7 @@ class DatabaseQueryPing extends AbstractPing
     public function ping()
     {
         try {
-            $pdo = new \PDO($this->dsn, $this->username, $this->password, $this->options);
+            @$pdo = new \PDO($this->dsn, $this->username, $this->password, $this->options);
             $response = $pdo->query($this->query);
             
             $ping = $this->evaluate($this->expression, [
