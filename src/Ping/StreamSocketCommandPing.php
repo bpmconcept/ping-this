@@ -66,6 +66,7 @@ class StreamSocketCommandPing extends AbstractPing
 
         return $this->evaluate($this->expression, [
             'response' => $response,
+            'error' => &$this->error,
         ]);
     }
 }
