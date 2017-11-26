@@ -4,15 +4,15 @@ namespace PingThis;
 
 use PingThis\Ping\PingInterface;
 use PingThis\Alarm\AlarmInterface;
+use PingThis\StatusListener\StatusListenerInterface;
 
 class Daemon
 {
     protected $debug;
     protected $alarm;
     protected $pings = [];
-    protected $lastCheck;
-    protected $inErrorState;
-
+    protected $listeners = [];
+    
     public function __construct()
     {
         $this->debug = false;
@@ -27,8 +27,7 @@ class Daemon
 
     public function registerPing(PingInterface $ping)
     {
-        $this->pings[] = $ping;
-        $this->lastCheck[$ping] = 0;
+        $this->pings[] = new PingStatus($ping);
     }
 
     public function registerAlarm(AlarmInterface $alarm)
@@ -36,35 +35,44 @@ class Daemon
         $this->alarm = $alarm;
     }
     
+    public function registerStatusListener(StatusListenerInterface $listener)
+    {
+        $this->listeners[] = $listener;
+    }
+    
     public function runOnce()
     {
-        foreach ($this->pings as $ping) {
-            if ((time() - $this->lastCheck[$ping]) >= $ping->getPingFrequency()) {
-                $this->lastCheck[$ping] = time();
+        foreach ($this->pings as $pingStatus) {
+            if ((time() - $pingStatus->getLastCheck()) >= $pingStatus->getPing()->getPingFrequency()) {
+                $pingStatus->setLastCheck(time());
                 
                 $attempts = 1;
                 
                 do {
                     // Check if it correctly pings
-                    $this->log(sprintf('Checking "%s"... ', $ping->getName()));
-                    $test = $ping->ping();
+                    $this->log(sprintf('Checking "%s"... ', $pingStatus->getPing()->getName()));
+                    $test = $pingStatus->getPing()->ping();
                     $this->log($test ? "\033[32mOK\033[0m\n" : "\033[31mError\033[0m\n");
-                } while (!$test && $attempts++ < $ping->getMaxAttemptsBeforeAlarm());
+                } while (!$test && $attempts++ < $pingStatus->getPing()->getMaxAttemptsBeforeAlarm());
                                 
                 // This ping triggers an error
                 if (!$test) {
-                    if (!$this->inErrorState->contains($ping)) {
-                        $this->inErrorState->attach($ping);
-                        $this->alarm->start($ping);
+                    if ($pingStatus->getStatus()) {
+                        $pingStatus->setStatus(false);
+                        $this->alarm->start($pingStatus->getPing());
                     }
                 }
 
                 // This ping instance was in error state
-                elseif ($this->inErrorState->contains($ping)) {
-                    $this->inErrorState->detach($ping);
-                    $this->alarm->stop($ping);
+                elseif (!$pingStatus->getStatus()) {
+                    $pingStatus->setStatus(true);
+                    $this->alarm->stop($pingStatus->getPing());
                 }
             }
+        }
+        
+        foreach ($this->listeners as $listener) {
+            $listener->update($this->pings);
         }
     }
 
