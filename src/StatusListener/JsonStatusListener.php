@@ -15,7 +15,11 @@ class JsonStatusListener implements StatusListenerInterface
     
     public function update(array $statusList)
     {
-        $data = array_map([$this, 'normalize'], $statusList);
+        $data = [
+            'lastUpdate' => time(),
+            'results' => array_map([$this, 'normalize'], $statusList),
+        ];
+        
         file_put_contents($this->file, \json_encode($data));
     }
     
@@ -23,8 +27,9 @@ class JsonStatusListener implements StatusListenerInterface
     {
         return [
             'ping' => $status->getPing()->getName(),
-            'status' => $status->getStatus(),
             'lastCheck' => $status->getLastCheck(),
+            'status' => $status->getStatus(),
+            'error' => $status->getPing()->getLastError(),
         ];
     }
 }
