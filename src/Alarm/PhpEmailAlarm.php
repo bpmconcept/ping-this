@@ -3,6 +3,7 @@
 namespace PingThis\Alarm;
 
 use PingThis\Ping\PingInterface;
+use PingThis\Formatter\DefaultFormatter;
 
 /**
  * Send an email for each alarm raised, using the PHP's mail function.
@@ -16,6 +17,7 @@ class PhpEmailAlarm extends AbstractAlarm
     {
         $this->email = $email;
         $this->headers = $headers;
+        $this->formatter = new DefaultFormatter();
     }
 
     public function start(PingInterface $ping)
