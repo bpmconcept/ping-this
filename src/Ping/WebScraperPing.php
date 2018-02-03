@@ -11,6 +11,7 @@ class WebScraperPing extends AbstractPing
     protected $method;
     protected $uri;
     protected $expression;
+    protected $parameters;
     protected $files;
     protected $server;
     protected $content;
@@ -36,14 +37,11 @@ class WebScraperPing extends AbstractPing
         $this->method = $method;
         $this->uri = $uri;
         $this->expression = $expression;
+        $this->parameters = $parameters;
         $this->files = $files;
         $this->server = $server;
         $this->content = $content;
         $this->expression = $expression;
-        $this->client = new Client();
-        
-        $parameters = array_merge(['timeout' => 3, 'connect_timeout' => 3], $parameters);
-        $this->client->setClient(new \GuzzleHttp\Client($parameters));
     }
 
     public function setMethod($method)
@@ -91,8 +89,14 @@ class WebScraperPing extends AbstractPing
     
     protected function doRequest()
     {
-        $crawler = $this->client->request($this->method, $this->uri, [], $this->files, $this->server, $this->content);
-        $response = $this->client->getResponse();
+        $goutte = new Client();
+        
+        // Set custom parameters
+        $parameters = array_merge(['timeout' => 3, 'connect_timeout' => 3], $this->parameters);
+        $goutte->setClient(new \GuzzleHttp\Client($parameters));
+        
+        $crawler = $goutte->request($this->method, $this->uri, [], $this->files, $this->server, $this->content);
+        $response = $goutte->getResponse();
         
         return [$crawler, $response];
     }
