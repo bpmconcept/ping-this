@@ -92,7 +92,7 @@ class WebScraperPing extends AbstractPing
         $goutte = new Client();
         
         // Set custom parameters
-        $parameters = array_merge(['timeout' => 3, 'connect_timeout' => 3], $this->parameters);
+        $parameters = array_merge(['timeout' => 5, 'connect_timeout' => 5], $this->parameters);
         $goutte->setClient(new \GuzzleHttp\Client($parameters));
         
         $crawler = $goutte->request($this->method, $this->uri, [], $this->files, $this->server, $this->content);
