@@ -16,7 +16,10 @@ class NetworkPing extends AbstractPing
     const METHOD_SYSTEM_PING = 'exec';
     const METHOD_SOCKET = 'fsockopen';
 
-    protected $ping;
+    protected $host;
+    protected $ttl = 64;
+    protected $timeout = 3;
+    protected $port;
     protected $method;
     protected $latency;
 
@@ -27,26 +30,23 @@ class NetworkPing extends AbstractPing
         }
 
         parent::__construct($frequency);
-        $this->ping = new Ping($host);
+        $this->host = $host;
         $this->method = self::METHOD_SYSTEM_PING;
-        
-        // Decrease default timeout
-        $this->ping->setTimeout(3);
     }
 
     public function setTtl($ttl)
     {
-        $this->ping->setTtl($ttl);
+        $this->ttl = $ttl;
     }
     
     public function setTimeout($timeout)
     {
-        $this->ping->setTimeout($timeout);
+        $this->timeout = $timeout;
     }
 
     public function setPort($port)
     {
-        $this->ping->setPort($port);
+        $this->port = $port;
     }
 
     public function setMethod($method)
@@ -56,16 +56,24 @@ class NetworkPing extends AbstractPing
     
     public function getName()
     {
-        return sprintf('Ping request on %s', $this->ping->getHost());
+        return sprintf('Ping request on %s', $this->host);
     }
 
     public function getLastError()
     {
-        return sprintf('Host %s is unreachable', $this->ping->getHost());
+        return sprintf('Host %s is unreachable', $this->host);
     }
 
     public function ping()
     {
-        return false !== $this->ping->ping($this->method ?: '');
+        $ping = new Ping($this->host);
+        $ping->setTtl($this->ttl);
+        $ping->setTimeout($this->timeout);
+        
+        if ($this->port !== null) {
+            $ping->setPort($this->port);
+        }
+        
+        return false !== $ping->ping($this->method ?: '');
     }
 }
