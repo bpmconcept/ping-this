@@ -72,6 +72,7 @@ class LdapSearchPing extends AbstractPing
         }
         
         $response = ldap_get_entries($ldap, $query);
+        ldap_close($ldap);
         
         return $this->evaluate($this->expression, [
             'response' => $response,
