@@ -70,6 +70,7 @@ SshCommandPing                  | Executes a custom command through SSH and chec
 StreamSocketCommandPing         | Sends a custom payload through a TCP/UDP/Unix socket and checks the response
 DatabasePing                    | Establishes a connection to a database using PDO
 DatabaseQueryPing               | Executes a SQL query on a database using PDO
+LdapSearchPing                  | Executes a query on a LDAP server and checks the response
 
 ### Built-in Alarms
 
