@@ -14,7 +14,8 @@
     "require-dev": {
         "geerlingguy/ping": "~1.1",
         "herzult/php-ssh": "~1.1",
-        "fabpot/goutte": "~3.1"
+        "fabpot/goutte": "~3.1",
+        "phpunit/phpunit": "~5.0"
     },
     "suggest": {
         "geerlingguy/ping": "Required by NetworkPing",
