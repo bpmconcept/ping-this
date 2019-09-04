@@ -7,7 +7,7 @@ class TlsCertificateExpirationPingTest extends \PHPUnit\Framework\TestCase
     public function testExpirationDate()
     {
         $ping = $this->getMockBuilder('PingThis\Ping\TlsCertificateExpirationPing')
-            ->setConstructorArgs([1, 'ssl://www.test.com:443', '+1 day'])
+            ->setConstructorArgs([1, 'www.test.com', 443, TlsCertificateExpirationPing::TLS, '+1 day'])
             ->setMethods(['getCertificateExpirationDate'])
             ->getMock();
 
@@ -19,7 +19,7 @@ class TlsCertificateExpirationPingTest extends \PHPUnit\Framework\TestCase
                 new \DateTime('+ 2 days'),
                 new \DateTime('+ 6 hours')
              ));
-        
+
         $this->assertTrue($ping->ping());
         $this->assertFalse($ping->ping());
         $this->assertTrue($ping->ping());

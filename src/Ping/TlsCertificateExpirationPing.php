@@ -52,6 +52,10 @@ class TlsCertificateExpirationPing extends AbstractPing
     public function ping()
     {
         try {
+            set_error_handler(function ($severity, $message, $file, $line) {
+                throw new \RuntimeException($message);
+            });
+
             $socket = $this->createSocket();
             $this->initialize($socket);
             $this->startTls($socket);
@@ -66,6 +70,8 @@ class TlsCertificateExpirationPing extends AbstractPing
         } catch (\RuntimeException $e) {
             $this->error = $e->getMessage();
             return false;
+        } finally {
+            restore_error_handler();
         }
     }
 
