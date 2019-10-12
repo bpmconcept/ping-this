@@ -10,8 +10,9 @@ namespace PingThis\Ping;
  */
 class TlsCertificateExpirationPing extends AbstractPing
 {
-    const TLS = 'tls';
+    const IMPLICIT_TLS = 'tls';
     const STARTTLS_SMTP = 'smtp';
+    const STARTTLS_IMAP = 'imap';
 
     protected $host;
     protected $port;
@@ -95,6 +96,12 @@ class TlsCertificateExpirationPing extends AbstractPing
             $helo = fread($socket, 2048);
             fwrite($socket, "STARTTLS\n");
             $starttls = fgets($socket);
+        }
+
+        elseif ($this->protocol === self::STARTTLS_IMAP) {
+            fread($socket, 2048);
+            fwrite($socket, ". STARTTLS\n");
+            fread($socket, 2048);
         }
     }
 
