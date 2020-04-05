@@ -14,39 +14,39 @@ class DatabaseQueryPing extends AbstractPing
     protected $password;
     protected $options;
     protected $error;
-    
-    public function __construct($frequency, $dsn, $query, $expression, $username = null, $password = null, $options = [])
+
+    public function __construct(int $frequency, string $dsn, string $query, $expression, string $username = null, string $password = null, array $options = [])
     {
         if (!class_exists('PDO')) {
             trigger_error('DatabasePing requires PDO', E_USER_ERROR);
         }
-        
+
         $this->dsn = $dsn;
         $this->query = $query;
         $this->expression = $expression;
         $this->username = $username;
         $this->password = $password;
         $this->options = $options;
-        
+
         parent::__construct($frequency);
     }
-    
-    public function getName()
+
+    public function getName(): string
     {
         return sprintf('Execute "%s" on %s', $this->query, $this->dsn);
     }
-    
-    public function getLastError()
+
+    public function getLastError(): string
     {
         return $this->error;
     }
-    
-    public function ping()
+
+    public function ping(): bool
     {
         try {
             @$pdo = new \PDO($this->dsn, $this->username, $this->password, $this->options);
             $response = $pdo->query($this->query);
-            
+
             $ping = $this->evaluate($this->expression, [
                 'response' => $response->fetchAll(),
                 'error' => &$this->error,
@@ -55,7 +55,7 @@ class DatabaseQueryPing extends AbstractPing
             if (!$ping && $this->error === null) {
                 $this->error = 'Unvalid database response';
             }
-            
+
             return $ping;
         } catch (\PDOException $e) {
             $this->error = sprintf('Database %s error "%s"', $this->dsn, $e->getMessage());

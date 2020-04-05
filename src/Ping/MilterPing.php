@@ -62,7 +62,7 @@ class MilterPing extends AbstractPing
      * @param $headers      Array of mail headers
      * @param $body         Mail body
      */
-    public function __construct($frequency, $host, $port, $headers, $body, $expression)
+    public function __construct(int $frequency, string $host, int $port, array $headers, string $body, $expression)
     {
         parent::__construct($frequency);
 
@@ -73,12 +73,12 @@ class MilterPing extends AbstractPing
         $this->expression = $expression;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return sprintf('Check Milter at %s:%d', $this->host, $this->port);
     }
 
-    public function getLastError()
+    public function getLastError(): string
     {
         if (null !== $this->error) {
             return $this->error;
@@ -87,7 +87,7 @@ class MilterPing extends AbstractPing
         }
     }
 
-    public function ping()
+    public function ping(): bool
     {
         if (!$stream = @stream_socket_client(sprintf('tcp://%s:%d', $this->host, $this->port), $errno, $errstr, 3)) {
             $this->error = sprintf('Stream socket connection failed: "%s"', $errstr);
@@ -184,7 +184,7 @@ class MilterPing extends AbstractPing
         ]);
     }
 
-    private function writeCommand($stream, $command, $payload = '')
+    private function writeCommand($stream, $command, string $payload = '')
     {
         fwrite($stream, pack('N', strlen($payload) + 1) . $command . $payload);
     }

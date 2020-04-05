@@ -7,7 +7,7 @@ namespace PingThis\Ping;
  */
 class HttpPing extends WebScraperPing
 {
-    public function __construct($frequency, $method, $uri, $code = 200)
+    public function __construct(int $frequency, string $method, string $uri, int $code = 200)
     {
         parent::__construct($frequency, $method, $uri, "response.getStatusCode() === $code");
     }

@@ -23,7 +23,7 @@ class NetworkPing extends AbstractPing
     protected $method;
     protected $latency;
 
-    public function __construct($frequency, $host)
+    public function __construct(int $frequency, string $host)
     {
         if (!class_exists('JJG\\Ping')) {
             trigger_error('NetworkPing requires "geerlingguy/ping" package installed', E_USER_ERROR);
@@ -38,7 +38,7 @@ class NetworkPing extends AbstractPing
     {
         $this->ttl = $ttl;
     }
-    
+
     public function setTimeout($timeout)
     {
         $this->timeout = $timeout;
@@ -53,27 +53,27 @@ class NetworkPing extends AbstractPing
     {
         $this->method = $method;
     }
-    
-    public function getName()
+
+    public function getName(): string
     {
         return sprintf('Ping request on %s', $this->host);
     }
 
-    public function getLastError()
+    public function getLastError(): string
     {
         return sprintf('Host %s is unreachable', $this->host);
     }
 
-    public function ping()
+    public function ping(): bool
     {
         $ping = new Ping($this->host);
         $ping->setTtl($this->ttl);
         $ping->setTimeout($this->timeout);
-        
+
         if ($this->port !== null) {
             $ping->setPort($this->port);
         }
-        
+
         return false !== $ping->ping($this->method ?: '');
     }
 }

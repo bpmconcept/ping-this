@@ -9,7 +9,7 @@
     ],
     "require": {
         "php": ">=7.2.0",
-        "symfony/expression-language": "~4.0"
+        "symfony/expression-language": "~5.0"
     },
     "require-dev": {
         "geerlingguy/ping": "~1.1",
@@ -19,7 +19,8 @@
     },
     "suggest": {
         "geerlingguy/ping": "Required by NetworkPing",
-        "fabpot/goutte": "Required by WebScraperPing",
+        "symfony/browser-kit": "Required by WebScraperPing",
+        "symfony/http-client": "Required by WebScraperPing",
         "ext-pdo": "Required by DatabasePing"
 	},
     "autoload": {

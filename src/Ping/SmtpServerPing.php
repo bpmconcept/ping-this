@@ -15,7 +15,7 @@ class SmtpServerPing extends AbstractPing
      * @param $port           SMTP server port
      * @param $timeout        Connection timeout
      */
-    public function __construct($frequency, $host, $port = 25, $timeout = 3)
+    public function __construct(int $frequency, string $host, int $port = 25, int $timeout = 3)
     {
         parent::__construct($frequency);
 
@@ -24,12 +24,12 @@ class SmtpServerPing extends AbstractPing
         $this->timeout = $timeout;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return sprintf('Check SMTP server at %s:%d', $this->host, $this->port);
     }
 
-    public function getLastError()
+    public function getLastError(): string
     {
         if (null !== $this->error) {
             return $this->error;
@@ -38,7 +38,7 @@ class SmtpServerPing extends AbstractPing
         }
     }
 
-    public function ping()
+    public function ping(): bool
     {
         if (!$stream = @stream_socket_client(sprintf('tcp://%s:%d', $this->host, $this->port), $errno, $errstr, $this->timeout)) {
             $this->error = sprintf('Stream socket connection failed: "%s"', $errstr);

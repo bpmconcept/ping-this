@@ -21,7 +21,7 @@ class TlsCertificateExpirationPing extends AbstractPing
     protected $date;
     protected $error;
 
-    public function __construct($frequency, $host, $port, $protocol, $threshold)
+    public function __construct(int $frequency, string $host, int $port, string $protocol, string $threshold)
     {
         if (!function_exists('openssl_x509_parse')) {
             trigger_error('TlsCertificateExpirationPing requires the OpenSSL module', E_USER_ERROR);
@@ -35,22 +35,22 @@ class TlsCertificateExpirationPing extends AbstractPing
         $this->threshold = $threshold;
     }
 
-    public function setThreshold($threshold)
+    public function setThreshold(string $threshold)
     {
         $this->threshold = $threshold;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return sprintf('TLS certificate validity on %s:%d', $this->host, $this->port);
     }
 
-    public function getLastError()
+    public function getLastError(): string
     {
         return $this->error;
     }
 
-    public function ping()
+    public function ping(): bool
     {
         try {
             set_error_handler(function ($severity, $message, $file, $line) {
