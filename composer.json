@@ -13,7 +13,8 @@
     },
     "require-dev": {
         "geerlingguy/ping": "~1.1",
-        "fabpot/goutte": "~4.0",
+        "symfony/browser-kit": "~5.0",
+        "symfony/http-client": "~5.0",
         "phpunit/phpunit": "~8.0"
     },
     "suggest": {

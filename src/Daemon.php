@@ -9,6 +9,7 @@ use PingThis\StatusListener\StatusListenerInterface;
 class Daemon
 {
     protected $debug;
+    protected $colors;
     protected $alarm;
     protected $pings = [];
     protected $listeners = [];
@@ -16,13 +17,15 @@ class Daemon
     public function __construct()
     {
         $this->debug = false;
+        $this->colors = false;
         $this->lastCheck = new \SplObjectStorage();
         $this->inErrorState = new \SplObjectStorage();
     }
 
-    public function enableDebugMode($debug)
+    public function enableDebugMode(bool $debug, bool $colors = false)
     {
         $this->debug = $debug;
+        $this->colors = $colors;
     }
 
     public function registerPing(PingInterface $ping)
@@ -52,7 +55,7 @@ class Daemon
                     // Check if it correctly pings
                     $this->log(sprintf('Checking "%s"... ', $pingStatus->getPing()->getName()));
                     $test = $pingStatus->getPing()->ping();
-                    $this->log($test ? "\033[32mOK\033[0m\n" : "\033[31mError\033[0m\n");
+                    $this->log($test ? "OK\n" : "Error\n", $test ? 32 : 31);
                 } while (!$test && $attempts++ < $pingStatus->getPing()->getMaxAttemptsBeforeAlarm());
 
                 // This ping triggers an error
@@ -88,9 +91,12 @@ class Daemon
         }
     }
 
-    protected function log($message)
+    protected function log(string $message, int $color = null)
     {
         if ($this->debug) {
+            if ($color !== null && $this->colors) {
+                $message = sprintf('\033[%dm%s\033[0m', $color, $message);
+            }
             printf($message);
         }
     }

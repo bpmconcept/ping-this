@@ -2,7 +2,8 @@
 
 namespace PingThis\Ping;
 
-use Goutte\Client;
+use Symfony\Component\BrowserKit\HttpBrowser;
+use Symfony\Component\HttpClient\HttpClient;
 
 class WebScraperPing extends AbstractPing
 {
@@ -15,7 +16,7 @@ class WebScraperPing extends AbstractPing
     protected $files;
     protected $server;
     protected $content;
-    
+
     /**
      * @param $frequency       The request frequency
      * @param $method          The request method
@@ -28,12 +29,16 @@ class WebScraperPing extends AbstractPing
      */
     public function __construct($frequency, $method, $uri, $expression, array $parameters = [], array $files = [], array $server = [], $content = null)
     {
-        if (!class_exists('Goutte\\Client')) {
-            trigger_error('WebScraperPing requires "fabpot/goutte" package installed', E_USER_ERROR);
+        if (!class_exists('\\Symfony\\Component\\BrowserKit\\HttpBrowser')) {
+            trigger_error('WebScraperPing requires "symfony/browser-kit" package installed', E_USER_ERROR);
         }
-        
+
+        if (!class_exists('\\Symfony\\Component\\HttpClient\\HttpClient')) {
+            trigger_error('WebScraperPing requires "symfony/http-client" package installed', E_USER_ERROR);
+        }
+
         parent::__construct($frequency);
-        
+
         $this->method = $method;
         $this->uri = $uri;
         $this->expression = $expression;
@@ -48,12 +53,12 @@ class WebScraperPing extends AbstractPing
     {
         $this->method = $method;
     }
-    
+
     public function setUri($uri)
     {
         $this->uri = $uri;
     }
-    
+
     public function getName()
     {
         return sprintf('HTTP %s request on %s', $this->method, $this->uri);
@@ -73,31 +78,31 @@ class WebScraperPing extends AbstractPing
             $this->error = sprintf('Unable to send the request, "%s"', $e->getMessage());
             return false;
         }
-        
+
         $ping = $this->evaluate($this->expression, [
             'response' => $response,
             'crawler' => $crawler,
             'error' => &$this->error,
         ]);
-        
+
         if (!$ping && $this->error === null) {
             $this->error = sprintf('Unvalid %s response at %s', $this->method, $this->uri);
         }
-        
+
         return $ping;
     }
-    
+
     protected function doRequest()
     {
-        $goutte = new Client();
-        
-        // Set custom parameters
-        $parameters = array_merge(['timeout' => 5, 'connect_timeout' => 5], $this->parameters);
-        $goutte->setClient(new \GuzzleHttp\Client($parameters));
-        
-        $crawler = $goutte->request($this->method, $this->uri, [], $this->files, $this->server, $this->content);
-        $response = $goutte->getResponse();
-        
+        $client = HttpClient::create([
+            'timeout' => 5,
+            'headers' => ['User-Agent' => 'Ping-This'],
+        ]);
+        $browser = new HttpBrowser($client);
+
+        $crawler = $browser->request($this->method, $this->uri, [], $this->files, $this->server, $this->content);
+        $response = $browser->getResponse();
+
         return [$crawler, $response];
     }
 }
