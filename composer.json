@@ -13,13 +13,11 @@
     },
     "require-dev": {
         "geerlingguy/ping": "~1.1",
-        "herzult/php-ssh": "~1.1",
         "fabpot/goutte": "~4.0",
         "phpunit/phpunit": "~8.0"
     },
     "suggest": {
         "geerlingguy/ping": "Required by NetworkPing",
-        "herzult/php-ssh": "Required by SshCommandPing",
         "fabpot/goutte": "Required by WebScraperPing",
         "ext-pdo": "Required by DatabasePing"
 	},

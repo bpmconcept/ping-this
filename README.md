@@ -8,7 +8,6 @@ PingThis is a lightweight PHP 7.2+ tool to build simple but functional headless 
 
 ``` php
 use PingThis\Daemon;
-use PingThis\SshSession;
 use PingThis\Alarm\PhpEmailAlarm;
 use PingThis\Ping\NetworkPing;
 use PingThis\Ping\WebScraperPing;
@@ -84,7 +83,6 @@ SmtpServerPing                  | Connects to a SMTP server and checks the welco
 Name                            | Description
 :------------------------------ | :---------------------------------------------------------------------------------------
 LdapSearchPing                  | Executes a query on a LDAP server and checks the response
-SshCommandPing                  | Executes a custom command through SSH and checks either stdout, stderr or exit code
 
 ### Built-in Alarms
 
