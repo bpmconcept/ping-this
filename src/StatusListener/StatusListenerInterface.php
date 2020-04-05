@@ -2,11 +2,13 @@
 
 namespace PingThis\StatusListener;
 
+use PingThis\Group;
+
 interface StatusListenerInterface
 {
     /**
-     * Called every second with the current status.
-     *
+     * Called every second, when all the pings from the root group have been
+     * tested.
      */
-    public function update(array $statusList);
+    public function update(Group $root);
 }
