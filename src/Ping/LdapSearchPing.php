@@ -37,13 +37,13 @@ class LdapSearchPing extends AbstractPing
 
     public function getLastError(): string
     {
-        return $this->error;
+        return $this->error ?: 'Unknown error';
     }
 
     public function ping(): bool
     {
         if (false === ($ldap = @ldap_connect($this->url))) {
-            $this->error = 'Failed to create a connection';
+            $this->error = sprintf('Failed to create a connection to %s', $this->url);
             return false;
         }
 
