@@ -66,7 +66,7 @@ class WebScraperPing extends AbstractPing
 
     public function getLastError(): string
     {
-        return $this->error;
+        return $this->error ?: 'Unknown error';
     }
 
     public function ping(): bool

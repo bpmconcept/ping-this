@@ -31,11 +31,7 @@ class SmtpServerPing extends AbstractPing
 
     public function getLastError(): string
     {
-        if (null !== $this->error) {
-            return $this->error;
-        } else {
-            return 'Command failed';
-        }
+        return $this->error ?: 'Unknown error';
     }
 
     public function ping(): bool
