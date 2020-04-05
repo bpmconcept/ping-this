@@ -38,9 +38,13 @@ class StreamSocketCommandPing extends AbstractPing
         return sprintf('Stream socket request on %s', $this->socket);
     }
 
-    public function getLastError(): string
+    public function getLastError(): ?string
     {
-        return $this->error ?: 'Unknown error';
+        if (null !== $this->error) {
+            return $this->error;
+        } else {
+            return 'Command failed';
+        }
     }
 
     public function ping(): bool

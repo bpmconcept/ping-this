@@ -35,7 +35,7 @@ class LdapSearchPing extends AbstractPing
         return sprintf('LDAP search on %s', $this->url);
     }
 
-    public function getLastError(): string
+    public function getLastError(): ?string
     {
         return $this->error ?: 'Unknown error';
     }

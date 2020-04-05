@@ -78,7 +78,7 @@ class MilterPing extends AbstractPing
         return sprintf('Check Milter at %s:%d', $this->host, $this->port);
     }
 
-    public function getLastError(): string
+    public function getLastError(): ?string
     {
         if (null !== $this->error) {
             return $this->error;

@@ -29,9 +29,13 @@ class ImapServerPing extends AbstractPing
         return sprintf('Check IMAP server at %s:%d', $this->host, $this->port);
     }
 
-    public function getLastError(): string
+    public function getLastError(): ?string
     {
-        return $this->error ?: 'Command failed';
+        if (null !== $this->error) {
+            return $this->error;
+        } else {
+            return 'Command failed';
+        }
     }
 
     public function ping(): bool

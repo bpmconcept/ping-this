@@ -32,9 +32,9 @@ class DatabasePing extends AbstractPing
         return sprintf('Connect to %s', $this->dsn);
     }
 
-    public function getLastError(): string
+    public function getLastError(): ?string
     {
-        return $this->error ?: 'Unknown error';
+        return $this->error;
     }
 
     public function ping(): bool

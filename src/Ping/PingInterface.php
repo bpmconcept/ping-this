@@ -8,7 +8,7 @@ interface PingInterface
      * Returns a string describing the last error, ie. the reason of the last
      * false response of ping().
      */
-    public function getLastError(): string;
+    public function getLastError(): ?string;
 
     /**
      * Returns a wanted frequency for this ping. This frequency may not be

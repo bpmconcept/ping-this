@@ -59,7 +59,7 @@ class NetworkPing extends AbstractPing
         return sprintf('Ping request on %s', $this->host);
     }
 
-    public function getLastError(): string
+    public function getLastError(): ?string
     {
         return sprintf('Host %s is unreachable', $this->host);
     }

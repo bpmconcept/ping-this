@@ -36,9 +36,9 @@ class DatabaseQueryPing extends AbstractPing
         return sprintf('Execute "%s" on %s', $this->query, $this->dsn);
     }
 
-    public function getLastError(): string
+    public function getLastError(): ?string
     {
-        return $this->error ?: 'Unknown error';
+        return $this->error;
     }
 
     public function ping(): bool
