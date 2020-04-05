@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/bpmconcept/ping-this.svg?branch=master)](https://travis-ci.org/bpmconcept/ping-this)
 
-PingThis is a lightweight PHP 5.5+ tool to build simple but functional headless monitoring systems.
+PingThis is a lightweight PHP 7.2+ tool to build simple but functional headless monitoring systems.
 
 ## Example
 
@@ -21,7 +21,7 @@ $daemon = new Daemon();
 $daemon->registerPing(new NetworkPing(10, 'domain.com'));
 
 // Check if a webserver responds correctly to a HTTP request every 30 seconds
-$daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', 'response.getStatus() == 200'));
+$daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', 'response.getStatusCode() == 200'));
 $daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', 'crawler.filter(".css").count()'));
 
 // Or equivalently using any PHP callable
@@ -49,7 +49,7 @@ verifies each Ping and, in case of failing, triggers the Alarm. Any class could 
 like an Alarm or a Ping, provided that it implements respectively the `AlarmInterface`
 or the `PingInterface`.
 
-The different built-in Pings rely on Symfony's [Expression Language Component](http://symfony.com/doc/2.8/components/expression_language/syntax.html)
+The different built-in Pings rely on Symfony's [Expression Language Component](https://symfony.com/doc/current/components/expression_language.html)
 to allow a quick and easy construction of triggering logic but can be equivalently replaced
 by a PHP callable.
 

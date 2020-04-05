@@ -1,14 +1,13 @@
 language: php
+os: linux
 php:
-  - 5.6
-  - 7.0
-  - 7.1
   - 7.2
+  - 7.3
+  - 7.4
 before_script:
   - sudo apt-get -qq update
   - sudo apt-get install -y -qq libssh2-1-dev
-  - touch /tmp/ignore
-  - if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then pecl install -f ssh2-0.13 < /tmp/ignore; fi
-  - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then pecl install -f ssh2-1.0 < /tmp/ignore; fi
+  - sudo pecl channel-update pecl.php.net
+  - pecl install -f ssh2-1.2
   - php -m | grep ssh2
   - composer install --dev

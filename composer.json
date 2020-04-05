@@ -8,14 +8,14 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
-        "symfony/expression-language": "^2.8"
+        "php": ">=7.2.0",
+        "symfony/expression-language": "~4.0"
     },
     "require-dev": {
         "geerlingguy/ping": "~1.1",
         "herzult/php-ssh": "~1.1",
-        "fabpot/goutte": "~3.1",
-        "phpunit/phpunit": "~5.0"
+        "fabpot/goutte": "~4.0",
+        "phpunit/phpunit": "~8.0"
     },
     "suggest": {
         "geerlingguy/ping": "Required by NetworkPing",
