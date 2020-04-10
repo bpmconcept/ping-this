@@ -49,7 +49,7 @@ class WebScraperPingTest extends \PHPUnit\Framework\TestCase
     public function testScraperExpression()
     {
         $ping = $this->getMockBuilder('PingThis\Ping\WebScraperPing')
-            ->setConstructorArgs([0, 'GET', 'https://www.google.com', 'response.getStatusCode() == 200 and crawler != null'])
+            ->setConstructorArgs([0, 'GET', 'https://www.google.com', 'response.getStatusCode() == 200 and content != null'])
             ->setMethods(['doRequest'])
             ->getMock();
 
@@ -58,6 +58,24 @@ class WebScraperPingTest extends \PHPUnit\Framework\TestCase
              ->will($this->onConsecutiveCalls(
                 [new Crawler(), new Response('content', 200)],
                 [new Crawler(), new Response('content', 404)]
+             ));
+
+        $this->assertTrue($ping->ping());
+        $this->assertFalse($ping->ping());
+    }
+
+    public function testScraperJsonData()
+    {
+        $ping = $this->getMockBuilder('PingThis\Ping\WebScraperPing')
+            ->setConstructorArgs([0, 'GET', 'https://www.google.com', 'response.getStatusCode() == 200 and content["x"][0] == 42'])
+            ->setMethods(['doRequest'])
+            ->getMock();
+
+        $ping->expects($this->any())
+             ->method('doRequest')
+             ->will($this->onConsecutiveCalls(
+                [new Crawler(), new Response(json_encode(['x' => [42, 43, 44]]), 200, ['content-type' => 'application/json'])],
+                [new Crawler(), new Response(json_encode(['x' => [41, 42, 43]]), 200, ['content-type' => 'application/json'])]
              ));
 
         $this->assertTrue($ping->ping());

@@ -21,11 +21,11 @@ $daemon->registerPing(new NetworkPing(10, 'domain.com'));
 
 // Check if a webserver responds correctly to a HTTP request every 30 seconds
 $daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', 'response.getStatusCode() == 200'));
-$daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', 'crawler.filter(".css").count()'));
+$daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', 'content.filter(".css").count()'));
 
 // Or equivalently using any PHP callable
-$daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', function ($response, $crawler) {
-    return $response->getStatus() < 400 && $crawler->filter('.element')->text() === "Hello";
+$daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', function ($response, $content) {
+    return $response->getStatus() < 400 && $content->filter('.element')->text() === "Hello";
 }));
 
 // Check every day that a certificate won't expire during the next week

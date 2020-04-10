@@ -74,6 +74,10 @@ class WebScraperPing extends AbstractPing
         try {
             list($crawler, $response) = $this->doRequest();
             $this->error = null;
+
+            if ($response->getHeader('content-type') == 'application/json') {
+                $data = json_decode($response->getContent(), true);
+            }
         } catch (\Exception $e) {
             $this->error = sprintf('Unable to send the request, "%s"', $e->getMessage());
             return false;
@@ -81,7 +85,7 @@ class WebScraperPing extends AbstractPing
 
         $ping = $this->evaluate($this->expression, [
             'response' => $response,
-            'crawler' => $crawler,
+            'content' => $data ?? $crawler,
             'error' => &$this->error,
         ]);
 
