@@ -89,7 +89,8 @@ LdapSearchPing                  | Executes a query on a LDAP server and checks t
 Name            | Description
 :-------------- | :---------------------------------------------------------------------------------------
 PhpEmailAlarm   | Send an email, using the PHP's mail() function
-StreamAlarm     | Simply logs the alarms events to a given open stream (stdout or file for instance)
+StreamAlarm     | Logs the alarms events to a given open stream (stdout or file for instance)
+LogAlarm        | Specialized StreamAlarm for files that adds a lock on the log file
 ParallelAlarm   | Dispatch the alert on multiple other Alarm instances
 
 ## Installation
