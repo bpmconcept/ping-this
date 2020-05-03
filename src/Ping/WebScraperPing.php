@@ -44,7 +44,7 @@ class WebScraperPing extends AbstractPing
         $this->expression = $expression;
         $this->parameters = $parameters;
         $this->files = $files;
-        $this->server = $server;
+        $this->server = array_merge(['HTTP_USER_AGENT' => 'PingThis'], $server);
         $this->content = $content;
         $this->expression = $expression;
     }
@@ -98,10 +98,7 @@ class WebScraperPing extends AbstractPing
 
     protected function doRequest()
     {
-        $client = HttpClient::create([
-            'timeout' => 5,
-            'headers' => ['User-Agent' => 'Ping-This'],
-        ]);
+        $client = HttpClient::create(['timeout' => 5]);
         $browser = new HttpBrowser($client);
 
         $crawler = $browser->request($this->method, $this->uri, [], $this->files, $this->server, $this->content);
