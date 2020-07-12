@@ -61,6 +61,8 @@ Name                            | Description
 NetworkPing                     | Sends a standard ICMP ping and checks the ICMP response
 StreamSocketCommandPing         | Sends a custom payload through a TCP/UDP/Unix socket and checks the response
 TlsCertificateExpirationPing    | Initiates a TLS handshake and checks the expiration date of a certificate
+SnmpGetValuePing                | Gets SNMP object value from a remote SNMP agent
+SnmpWalkValuePing               | Gets SNMP object values from a remote SNMP agent
 
 ### Web
 
