@@ -2,8 +2,12 @@
 
 namespace PingThis\Ping;
 
+use PingThis\Ping\Base\SnmpSessionTrait;
+
 class SnmpWalkValuePing extends AbstractPing
 {
+    use SnmpSessionTrait;
+
     protected $host;
     protected $oid;
     protected $parameters;
@@ -28,7 +32,7 @@ class SnmpWalkValuePing extends AbstractPing
         $this->host = $host;
         $this->oid = $oid;
         $this->expression = $expression;
-        $this->parameters = array_merge(['version' => '2c', 'community' => 'public'], $parameters);
+        $this->parameters = $this->getParameters($parameters);
     }
 
     public function getName(): string
@@ -58,27 +62,5 @@ class SnmpWalkValuePing extends AbstractPing
             'response' => $response,
             'error' => &$this->error,
         ]);
-    }
-
-    protected function getSession(): \SNMP
-    {
-        switch ($this->parameters['version']) {
-            case '1':
-                return new \SNMP(\SNMP::VERSION_1, $this->host, $this->parameters['community']);
-            case '2c':
-                return new \SNMP(\SNMP::VERSION_2C, $this->host, $this->parameters['community']);
-            case '3':
-                $session = new \SNMP(\SNMP::VERSION_3, $this->host, $this->parameters['community']);
-                $session->setSecurity($this->parameters['sec_level'],
-                    $this->parameters['auth_protocol'] ?? null,
-                    $this->parameters['auth_passphrase'] ?? null,
-                    $this->parameters['priv_protocol'] ?? null,
-                    $this->parameters['priv_passphrase'] ?? null,
-                    $this->parameters['contextName'] ?? null,
-                    $this->parameters['contextEngineID'] ?? null);
-                return $session;
-            default:
-                trigger_error(sprintf('Unknown SNMP version %d', $this->parameters['version']), E_USER_ERROR);
-        }
     }
 }
