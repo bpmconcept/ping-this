@@ -24,12 +24,12 @@ class WhoisDomainExpirationPing extends StreamSocketCommandPing
 
     protected function checkDate($response, &$error)
     {
-        if (!preg_match('/.*Expiration Date.*: ([0-9TZ:\.\-]+)/', $response, $matches)) {
+        if (!preg_match('/.*(expiration|expiry) date.*: ([0-9TZ:\.\-]+)/i', $response, $matches)) {
             $error = "Expiration date not found";
             return false;
         }
 
-        if (new \DateTime($matches[1]) < new \DateTime($this->threshold)) {
+        if (new \DateTime($matches[2]) < new \DateTime($this->threshold)) {
             $this->error = sprintf('Domain expires on %s', $this->date->format('Y-m-d H:i:s'));
             return false;
         }
