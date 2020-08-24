@@ -10,25 +10,28 @@ use PingThis\Formatter\DefaultFormatter;
  */
 class StreamAlarm extends AbstractAlarm
 {
-    public function __construct($stream)
+    public function __construct($stream, bool $verbose = false)
     {
         $this->stream = $stream;
+        $this->verbose = $verbose;
         $this->formatter = new DefaultFormatter();
     }
 
     public function start(PingInterface $ping)
     {
         $date = new \DateTime();
-        $message = $this->formatter->formatShortErrorMessage($date, $ping, true);
-        
+        $message = $this->verbose ? $this->formatter->formatFullErrorMessage($date, $ping, true) :
+            $this->formatter->formatShortErrorMessage($date, $ping, true);
+
         fwrite($this->stream, $message . PHP_EOL);
     }
 
     public function stop(PingInterface $ping)
     {
         $date = new \DateTime();
-        $message = $this->formatter->formatShortErrorMessage($date, $ping, false);
-        
+        $message = $this->verbose ? $this->formatter->formatFullErrorMessage($date, $ping, false) :
+            $this->formatter->formatShortErrorMessage($date, $ping, false);
+
         fwrite($this->stream, $message . PHP_EOL);
     }
 }
