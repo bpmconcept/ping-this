@@ -52,7 +52,7 @@ class LdapSearchPing extends AbstractPing
         }
 
         // Authentication
-        if ($this->rdn !== null && !@ldap_bind($ldap, $this->rdn, $this->password)) {
+        if (!@ldap_bind($ldap, $this->rdn, $this->password)) {
             $this->error = sprintf('Unable to bind to server: %s', ldap_error($ldap));
             ldap_close($ldap);
             return false;
