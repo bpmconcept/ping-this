@@ -11,11 +11,17 @@ trait SnmpSessionTrait
 
     protected function getSession(): \SNMP
     {
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+        });
+
         switch ($this->parameters['version']) {
             case '1':
-                return new \SNMP(\SNMP::VERSION_1, $this->host, $this->parameters['community']);
+                $snmp = new \SNMP(\SNMP::VERSION_1, $this->host, $this->parameters['community']);
+                break;
             case '2c':
-                return new \SNMP(\SNMP::VERSION_2C, $this->host, $this->parameters['community']);
+                $snmp = new \SNMP(\SNMP::VERSION_2C, $this->host, $this->parameters['community']);
+                break;
             case '3':
                 $session = new \SNMP(\SNMP::VERSION_3, $this->host, $this->parameters['user']);
                 $session->setSecurity($this->parameters['sec_level'],
@@ -25,9 +31,17 @@ trait SnmpSessionTrait
                     $this->parameters['priv_passphrase'] ?? null,
                     $this->parameters['contextName'] ?? null,
                     $this->parameters['contextEngineID'] ?? null);
-                return $session;
+                $snmp = $session;
+                break;
             default:
+                restore_error_handler();
                 trigger_error(sprintf('Unknown SNMP version %d', $this->parameters['version']), E_USER_ERROR);
         }
+
+        // Enable exceptions instead of warnings
+        $snmp->exceptions_enabled = \SNMP::ERRNO_ANY;
+        restore_error_handler();
+
+        return $snmp;
     }
 }

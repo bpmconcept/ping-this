@@ -44,12 +44,11 @@ class SnmpDiskUsagePing extends AbstractPing
 
     public function ping(): bool
     {
-        $session = $this->getSession();
-        $session->valueretrieval = SNMP_VALUE_OBJECT | SNMP_VALUE_PLAIN;
-        $session->exceptions_enabled = \SNMP::ERRNO_ANY;
-        $error = [];
-
         try {
+            $session = $this->getSession();
+            $session->valueretrieval = SNMP_VALUE_OBJECT | SNMP_VALUE_PLAIN;
+            $error = [];
+
             foreach ($session->walk("HOST-RESOURCES-MIB::hrStorageIndex") as $index) {
                 if ($session->get("HOST-RESOURCES-MIB::hrStorageType.$index->value")->value === 'HOST-RESOURCES-MIB::hrStorageTypes.4') {
                     $path = $session->get("HOST-RESOURCES-MIB::hrStorageDescr.$index->value")->value;
@@ -62,7 +61,7 @@ class SnmpDiskUsagePing extends AbstractPing
                     }
                 }
             }
-        } catch (\SNMPException $e) {
+        } catch (\SNMPException | \ErrorException $e) {
             $this->error = $e->getMessage();
             return false;
         }
