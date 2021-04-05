@@ -29,8 +29,9 @@ class WhoisDomainExpirationPing extends StreamSocketCommandPing
             return false;
         }
 
-        if (new \DateTime($matches[2]) < new \DateTime($this->threshold)) {
-            $this->error = sprintf('Domain expires on %s', $this->date->format('Y-m-d H:i:s'));
+        $date = new \DateTime($matches[2]);
+        if ($date < new \DateTime($this->threshold)) {
+            $this->error = sprintf('Domain expires on %s', $date->format('Y-m-d H:i:s'));
             return false;
         }
 
