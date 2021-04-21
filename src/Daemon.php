@@ -9,6 +9,7 @@ use PingThis\StatusListener\StatusListenerInterface;
 class Daemon
 {
     protected $debug;
+    protected $randomization;
     protected $colors;
     protected $alarm;
     protected $root;
@@ -17,6 +18,7 @@ class Daemon
     public function __construct()
     {
         $this->debug = false;
+        $this->randomization = false;
         $this->colors = false;
         $this->root = new Group('root');
     }
@@ -25,6 +27,11 @@ class Daemon
     {
         $this->debug = $debug;
         $this->colors = $colors;
+    }
+
+    public function enableFrequencyRandomization(bool $randomization)
+    {
+        $this->randomization = $randomization;
     }
 
     public function registerPing(PingInterface $ping)
@@ -51,17 +58,16 @@ class Daemon
     {
         $runGroup = function(Group $group) use(&$runGroup) {
             foreach ($group->getPings() as $pingStatus) {
-                if ((time() - $pingStatus->getLastCheck()) >= $pingStatus->getPing()->getPingFrequency()) {
-                    $pingStatus->setLastCheck(time());
-
+                if ($pingStatus->needsCheck(time())) {
                     $attempts = 1;
-
                     do {
                         // Check if it correctly pings
                         $this->log(sprintf('Checking "%s"... ', $pingStatus->getPing()->getName()));
                         $test = $pingStatus->getPing()->ping();
                         $this->log($test ? "OK\n" : "Error\n", $test ? 32 : 31);
                     } while (!$test && $attempts++ < $pingStatus->getPing()->getMaxAttemptsBeforeAlarm());
+
+                    $pingStatus->hasBeenCheckedAt(time(), $this->randomization);
 
                     // This ping triggers an error
                     if (!$test) {
