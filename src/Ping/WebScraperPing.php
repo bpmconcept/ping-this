@@ -104,6 +104,9 @@ class WebScraperPing extends AbstractPing
         $crawler = $browser->request($this->method, $this->uri, [], $this->files, $this->server, $this->content);
         $response = $browser->getResponse();
 
+        // Prevent curl resources leak
+        $client->reset();
+
         return [$crawler, $response];
     }
 }
