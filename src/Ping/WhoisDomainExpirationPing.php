@@ -24,7 +24,7 @@ class WhoisDomainExpirationPing extends StreamSocketCommandPing
 
     protected function checkDate($response, &$error)
     {
-        if (!preg_match('/.*(expiration|expiry) date.*: ([0-9TZ:\.\-]+)/i', $response, $matches)) {
+        if (!preg_match('/.*(expiration|expiry) date\s?:\s*([0-9TZ:\.\-]+)/i', $response, $matches)) {
             $error = "Expiration date not found";
             return false;
         }
