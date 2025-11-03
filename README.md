@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/bpmconcept/ping-this/actions/workflows/php.yml/badge.svg)](https://github.com/bpmconcept/ping-this/actions/workflows/php.yml)
 
-PingThis is a lightweight PHP 8.3+ tool to build simple but functional headless monitoring systems.
+PingThis is a lightweight PHP 8.3+ toolkit that lets you compose headless monitoring checks and route actionable alerts with just a bit of code.
 
 ## Example
 
@@ -20,11 +20,11 @@ $daemon = new Daemon();
 $daemon->registerPing(new NetworkPing(10, 'domain.com'));
 
 // Check if a webserver responds correctly to a HTTP request every 30 seconds
-$daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', 'response.getStatusCode() == 200'));
-$daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', 'content.filter(".css").count()'));
+$daemon->registerPing(new WebScraperPing(30, 'GET', 'https://domain.com', 'response.getStatusCode() == 200'));
+$daemon->registerPing(new WebScraperPing(30, 'GET', 'https://domain.com', 'content.filter(".css").count()'));
 
 // Or equivalently using any PHP callable
-$daemon->registerPing(new WebScraperPing(30, 'GET', 'http://domain.com', function ($response, $content) {
+$daemon->registerPing(new WebScraperPing(30, 'GET', 'https://domain.com', function ($response, $content) {
     return $response->getStatus() < 400 && $content->filter('.element')->text() === "Hello";
 }));
 
@@ -69,10 +69,9 @@ SnmpDiskUsagePing               | Walks SNMP storage metrics and checks disk usa
 
 Name                            | Description
 :------------------------------ | :---------------------------------------------------------------------------------------
-DatabasePing                    | Establishes a connection to a database using PDO
-DatabaseQueryPing               | Executes a SQL query on a database using PDO
 HttpPing                        | Sends a HTTP request and checks only the returned code
-WebScraperPing                  | Sends a HTTP request and get back a [Response](http://api.symfony.com/2.8/Symfony/Component/BrowserKit/Response.html), along with a [Crawler](http://symfony.com/doc/2.8/components/dom_crawler.html) instance
+WebScraperPing                  | Sends a HTTP request and get back a [Response](https://symfony.com/doc/current/components/browser_kit.html), along with a [Crawler](https://symfony.com/doc/current/components/dom_crawler.html) instance
+WhoisDomainExpirationPing       | Queries WHOIS to ensure a domain expiration date stays beyond a threshold
 
 ### Mails
 
@@ -80,14 +79,15 @@ Name                            | Description
 :------------------------------ | :---------------------------------------------------------------------------------------
 ImapServerPing                  | Connects to a IMAP server and checks the welcome response
 SmtpServerPing                  | Connects to a SMTP server and checks the welcome response
+MilterPing                      | Simulates an SMTP conversation with a Milter server and validates its actions
 
-### Other services
+### Services
 
 Name                            | Description
 :------------------------------ | :---------------------------------------------------------------------------------------
+DatabasePing                    | Establishes a connection to a database using PDO
+DatabaseQueryPing               | Executes a SQL query on a database using PDO
 LdapSearchPing                  | Executes a query on a LDAP server and checks the response
-MilterPing                      | Simulates an SMTP conversation with a Milter server and validates its actions
-WhoisDomainExpirationPing       | Queries WHOIS to ensure a domain expiration date stays beyond a threshold
 
 ### Built-in Alarms
 
