@@ -15,41 +15,40 @@ class NetworkPing extends AbstractPing
 {
     const METHOD_SYSTEM_PING = 'exec';
     const METHOD_SOCKET = 'fsockopen';
+    const METHOD_RAW_SOCKET = 'socket';
 
-    protected $host;
-    protected $ttl = 64;
-    protected $timeout = 3;
-    protected $port;
-    protected $method;
-    protected $latency;
+    protected int $ttl = 64;
+    protected int $timeout = 3;
+    protected ?int $port = null;
+    protected string $method;
+    protected ?float $latency = null;
 
-    public function __construct(int $frequency, string $host)
+    public function __construct(int $frequency, private readonly string $host)
     {
         if (!class_exists('JJG\\Ping')) {
             trigger_error('NetworkPing requires "geerlingguy/ping" package installed', E_USER_ERROR);
         }
 
         parent::__construct($frequency);
-        $this->host = $host;
         $this->method = self::METHOD_SYSTEM_PING;
     }
 
-    public function setTtl($ttl)
+    public function setTtl(int $ttl): void
     {
         $this->ttl = $ttl;
     }
 
-    public function setTimeout($timeout)
+    public function setTimeout(int $timeout): void
     {
         $this->timeout = $timeout;
     }
 
-    public function setPort($port)
+    public function setPort(int $port): void
     {
         $this->port = $port;
     }
 
-    public function setMethod($method)
+    public function setMethod(string $method): void
     {
         $this->method = $method;
     }
@@ -74,6 +73,11 @@ class NetworkPing extends AbstractPing
             $ping->setPort($this->port);
         }
 
-        return false !== $ping->ping($this->method ?: '');
+        $method = match ($this->method) {
+            self::METHOD_SOCKET, self::METHOD_RAW_SOCKET, self::METHOD_SYSTEM_PING => $this->method,
+            default => self::METHOD_SYSTEM_PING,
+        };
+
+        return false !== $ping->ping($method);
     }
 }

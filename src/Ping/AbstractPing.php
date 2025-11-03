@@ -6,13 +6,11 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 abstract class AbstractPing implements PingInterface
 {
-    protected $frequency;
-    protected $attempts;
-    protected $language;
+    protected int $attempts;
+    protected ExpressionLanguage $language;
 
-    public function __construct(int $frequency)
+    public function __construct(protected readonly int $frequency)
     {
-        $this->frequency = $frequency;
         $this->attempts = 3;
         $this->language = new ExpressionLanguage();
     }
@@ -36,30 +34,40 @@ abstract class AbstractPing implements PingInterface
     {
         // User passed a callable
         if (is_callable($expression)) {
-            $reflection = is_array($expression) ? new \ReflectionMethod($expression[0], $expression[1]) : new \ReflectionFunction($expression);
+            $reflection = is_array($expression)
+                ? new \ReflectionMethod($expression[0], $expression[1])
+                : new \ReflectionFunction($expression);
             $parameters = $reflection->getNumberOfParameters();
 
-            // Use has provided a callable with too much parameters
+            // User has provided a callable with too many parameters
             if ($parameters > count($data)) {
                 throw new \InvalidArgumentException(sprintf('A callable with %d parameters at most was expected', count($data)));
             }
 
-            $arguments = [];
-            $index = 0;
-            foreach ($data as $key => &$value) {
-                $arguments[] =& $data[$key];
-                if (++$index >= $parameters) {
-                    break;
-                }
-            }
-            unset($value);
-
-            return (bool) call_user_func_array($expression, $arguments);
+            return (bool) $expression(...$this->buildArguments($data, $parameters));
         }
 
         // User passed a string, we assume that it is an expression for ExpressionLanguage
         if (is_string($expression)) {
             return (bool) $this->language->evaluate($expression, $data);
         }
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function buildArguments(array &$data, int $parameters): array
+    {
+        $arguments = [];
+        $index = 0;
+        foreach ($data as $key => &$value) {
+            $arguments[] =& $data[$key];
+            if (++$index >= $parameters) {
+                break;
+            }
+        }
+        unset($value);
+
+        return $arguments;
     }
 }

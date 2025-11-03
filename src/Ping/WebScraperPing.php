@@ -7,15 +7,17 @@ use Symfony\Component\HttpClient\HttpClient;
 
 class WebScraperPing extends AbstractPing
 {
-    protected $client;
-    protected $error;
-    protected $method;
-    protected $uri;
-    protected $expression;
-    protected $parameters;
-    protected $files;
-    protected $server;
-    protected $content;
+    protected ?string $error = null;
+    protected string $method;
+    protected string $uri;
+    protected string|array|\Closure $expression;
+    /** @var array<string, mixed> */
+    protected array $parameters;
+    /** @var array<string, mixed> */
+    protected array $files;
+    /** @var array<string, mixed> */
+    protected array $server;
+    protected ?string $content;
 
     /**
      * @param $frequency       The request frequency
@@ -27,7 +29,7 @@ class WebScraperPing extends AbstractPing
      * @param $server          The server parameters (HTTP headers are referenced with a HTTP_ prefix as PHP does)
      * @param $content         The raw body data
      */
-    public function __construct(int $frequency, string $method, string $uri, $expression, array $parameters = [], array $files = [], array $server = [], string $content = null)
+    public function __construct(int $frequency, string $method, string $uri, string|array|\Closure $expression, array $parameters = [], array $files = [], array $server = [], ?string $content = null)
     {
         if (!class_exists('\\Symfony\\Component\\BrowserKit\\HttpBrowser')) {
             trigger_error('WebScraperPing requires "symfony/browser-kit" package installed', E_USER_ERROR);
@@ -46,7 +48,6 @@ class WebScraperPing extends AbstractPing
         $this->files = $files;
         $this->server = array_merge(['HTTP_USER_AGENT' => 'PingThis'], $server);
         $this->content = $content;
-        $this->expression = $expression;
     }
 
     public function setMethod(string $method)
@@ -72,10 +73,10 @@ class WebScraperPing extends AbstractPing
     public function ping(): bool
     {
         try {
-            list($crawler, $response) = $this->doRequest();
+            [$crawler, $response] = $this->doRequest();
             $this->error = null;
 
-            if ($response->getHeader('content-type') == 'application/json') {
+            if (str_contains(strtolower($response->getHeader('content-type') ?? ''), 'application/json')) {
                 $data = json_decode($response->getContent(), true);
             }
         } catch (\Exception $e) {
@@ -98,7 +99,7 @@ class WebScraperPing extends AbstractPing
 
     protected function doRequest()
     {
-        $client = HttpClient::create(['timeout' => 5]);
+        $client = HttpClient::create(timeout: 5);
         $browser = new HttpBrowser($client);
 
         $crawler = $browser->request($this->method, $this->uri, [], $this->files, $this->server, $this->content);

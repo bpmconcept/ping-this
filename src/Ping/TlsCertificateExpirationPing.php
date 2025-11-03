@@ -14,28 +14,25 @@ class TlsCertificateExpirationPing extends AbstractPing
     const STARTTLS_SMTP = 'smtp';
     const STARTTLS_IMAP = 'imap';
 
-    protected $host;
-    protected $port;
-    protected $protocol;
-    protected $threshold;
-    protected $date;
-    protected $error;
+    private ?\DateTime $date = null;
+    private ?string $error = null;
 
-    public function __construct(int $frequency, string $host, int $port, string $protocol, string $threshold)
+    public function __construct(
+        int $frequency,
+        private readonly string $host,
+        private readonly int $port,
+        private readonly string $protocol,
+        private string $threshold
+    )
     {
         if (!function_exists('openssl_x509_parse')) {
             trigger_error('TlsCertificateExpirationPing requires the OpenSSL module', E_USER_ERROR);
         }
 
         parent::__construct($frequency);
-
-        $this->host = $host;
-        $this->port = $port;
-        $this->protocol = $protocol;
-        $this->threshold = $threshold;
     }
 
-    public function setThreshold(string $threshold)
+    public function setThreshold(string $threshold): void
     {
         $this->threshold = $threshold;
     }
@@ -53,7 +50,7 @@ class TlsCertificateExpirationPing extends AbstractPing
     public function ping(): bool
     {
         try {
-            set_error_handler(function ($severity, $message, $file, $line) {
+            set_error_handler(static function ($severity, $message): void {
                 throw new \RuntimeException($message);
             });
 
@@ -79,7 +76,7 @@ class TlsCertificateExpirationPing extends AbstractPing
     protected function createSocket()
     {
         $timeout = min(10, $this->getPingFrequency());
-        $context = stream_context_create(['ssl' => ['capture_peer_cert' => TRUE]]);
+        $context = stream_context_create(['ssl' => ['capture_peer_cert' => true]]);
 
         if (false === ($socket = @stream_socket_client(sprintf('tcp://%s:%d', $this->host, $this->port), $errno, $errstr, $timeout, STREAM_CLIENT_CONNECT, $context))) {
             throw new \RuntimeException($errstr);
@@ -88,24 +85,16 @@ class TlsCertificateExpirationPing extends AbstractPing
         return $socket;
     }
 
-    protected function initialize($socket)
+    protected function initialize($socket): void
     {
-        if ($this->protocol === self::STARTTLS_SMTP) {
-            $welcome = fread($socket, 2048);
-            fwrite($socket, "EHLO ping-this\n");
-            $helo = fread($socket, 2048);
-            fwrite($socket, "STARTTLS\n");
-            $starttls = fgets($socket);
-        }
-
-        elseif ($this->protocol === self::STARTTLS_IMAP) {
-            fread($socket, 2048);
-            fwrite($socket, ". STARTTLS\n");
-            fread($socket, 2048);
-        }
+        match ($this->protocol) {
+            self::STARTTLS_SMTP => $this->initializeSmtp($socket),
+            self::STARTTLS_IMAP => $this->initializeImap($socket),
+            default => null,
+        };
     }
 
-    protected function startTls($socket)
+    protected function startTls($socket): void
     {
         stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT);
     }
@@ -116,5 +105,21 @@ class TlsCertificateExpirationPing extends AbstractPing
         $infos = openssl_x509_parse($certificate['options']['ssl']['peer_certificate']);
 
         return new \DateTime('@'.$infos['validTo_time_t']);
+    }
+
+    private function initializeSmtp($socket): void
+    {
+        fread($socket, 2048);
+        fwrite($socket, "EHLO ping-this\n");
+        fread($socket, 2048);
+        fwrite($socket, "STARTTLS\n");
+        fgets($socket);
+    }
+
+    private function initializeImap($socket): void
+    {
+        fread($socket, 2048);
+        fwrite($socket, ". STARTTLS\n");
+        fread($socket, 2048);
     }
 }

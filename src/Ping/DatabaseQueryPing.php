@@ -7,26 +7,21 @@ namespace PingThis\Ping;
  */
 class DatabaseQueryPing extends AbstractPing
 {
-    protected $dsn;
-    protected $query;
-    protected $expression;
-    protected $username;
-    protected $password;
-    protected $options;
-    protected $error;
+    private ?string $error = null;
 
-    public function __construct(int $frequency, string $dsn, string $query, $expression, string $username = null, string $password = null, array $options = [])
+    public function __construct(
+        int $frequency,
+        private readonly string $dsn,
+        private readonly string $query,
+        private readonly string|array|\Closure $expression,
+        private readonly ?string $username = null,
+        private readonly ?string $password = null,
+        private readonly array $options = []
+    )
     {
         if (!class_exists('PDO')) {
             trigger_error('DatabasePing requires PDO', E_USER_ERROR);
         }
-
-        $this->dsn = $dsn;
-        $this->query = $query;
-        $this->expression = $expression;
-        $this->username = $username;
-        $this->password = $password;
-        $this->options = $options;
 
         parent::__construct($frequency);
     }

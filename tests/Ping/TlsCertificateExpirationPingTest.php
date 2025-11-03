@@ -14,8 +14,10 @@ class TlsCertificateExpirationPingTest extends \PHPUnit\Framework\TestCase
         $socket = fopen('php://memory', 'r');
 
         $ping->method('createSocket')->willReturn($socket);
-        $ping->method('initialize')->willReturn(null);
-        $ping->method('startTls')->willReturn(true);
+        $ping->method('initialize')->willReturnCallback(static function (): void {
+        });
+        $ping->method('startTls')->willReturnCallback(static function (): void {
+        });
 
         $ping->expects($this->any())
              ->method('getCertificateExpirationDate')
