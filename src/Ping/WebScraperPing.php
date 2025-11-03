@@ -99,7 +99,7 @@ class WebScraperPing extends AbstractPing
 
     protected function doRequest()
     {
-        $client = HttpClient::create(timeout: 5);
+        $client = HttpClient::create(['timeout' => 5]);
         $browser = new HttpBrowser($client);
 
         $crawler = $browser->request($this->method, $this->uri, [], $this->files, $this->server, $this->content);
