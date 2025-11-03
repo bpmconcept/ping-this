@@ -44,7 +44,17 @@ abstract class AbstractPing implements PingInterface
                 throw new \InvalidArgumentException(sprintf('A callable with %d parameters at most was expected', count($data)));
             }
 
-            return (bool) call_user_func_array($expression, array_slice($data, 0, $parameters));
+            $arguments = [];
+            $index = 0;
+            foreach ($data as $key => &$value) {
+                $arguments[] =& $data[$key];
+                if (++$index >= $parameters) {
+                    break;
+                }
+            }
+            unset($value);
+
+            return (bool) call_user_func_array($expression, $arguments);
         }
 
         // User passed a string, we assume that it is an expression for ExpressionLanguage

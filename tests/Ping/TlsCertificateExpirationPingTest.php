@@ -8,8 +8,14 @@ class TlsCertificateExpirationPingTest extends \PHPUnit\Framework\TestCase
     {
         $ping = $this->getMockBuilder('PingThis\Ping\TlsCertificateExpirationPing')
             ->setConstructorArgs([1, 'www.test.com', 443, TlsCertificateExpirationPing::IMPLICIT_TLS, '+1 day'])
-            ->setMethods(['getCertificateExpirationDate'])
+            ->onlyMethods(['getCertificateExpirationDate', 'createSocket', 'initialize', 'startTls'])
             ->getMock();
+
+        $socket = fopen('php://memory', 'r');
+
+        $ping->method('createSocket')->willReturn($socket);
+        $ping->method('initialize')->willReturn(null);
+        $ping->method('startTls')->willReturn(true);
 
         $ping->expects($this->any())
              ->method('getCertificateExpirationDate')
