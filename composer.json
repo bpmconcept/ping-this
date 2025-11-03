@@ -1,6 +1,7 @@
 {
     "name": "bpmconcept/ping-this",
     "license": "MIT",
+    "description": "PingThis is a lightweight PHP 8.3+ toolkit that lets you compose headless monitoring checks and route actionable alerts with just a bit of code.",
     "authors": [
         {
             "name": "Marc Blanc-Patin",
