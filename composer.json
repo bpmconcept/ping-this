@@ -13,14 +13,12 @@
         "symfony/expression-language": "^7.3"
     },
     "require-dev": {
-        "geerlingguy/ping": "^1.2",
         "symfony/browser-kit": "^7.3",
         "symfony/http-client": "^7.3",
         "phpunit/phpunit": "^12.4",
         "ext-sqlite3": "*"
     },
     "suggest": {
-        "geerlingguy/ping": "Required by NetworkPing",
         "symfony/browser-kit": "Required by WebScraperPing",
         "symfony/http-client": "Required by WebScraperPing",
         "ext-pdo": "Required by DatabasePing"

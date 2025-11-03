@@ -58,7 +58,7 @@ by a PHP callable.
 
 Name                            | Description
 :------------------------------ | :---------------------------------------------------------------------------------------
-NetworkPing                     | Sends a standard ICMP ping and checks the ICMP response
+NetworkPing                     | Sends a standard ICMP ping and checks the ICMP response (needs `CAP_NET_RAW`)
 StreamSocketCommandPing         | Sends a custom payload through a TCP/UDP/Unix socket and checks the response
 TlsCertificateExpirationPing    | Initiates a TLS handshake and checks the expiration date of a certificate
 SnmpGetValuePing                | Gets SNMP object value from a remote SNMP agent
@@ -105,6 +105,5 @@ The recommended way to install PingThis is through Composer :
 ```bash
 composer require bpmconcept/ping-this
 ```
-
 PingThis does not intend to provide a fully functional daemon out of the box. You are
 still responsible for writing a configured daemon like in the previous example.
