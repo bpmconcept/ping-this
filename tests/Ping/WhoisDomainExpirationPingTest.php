@@ -1,10 +1,11 @@
 <?php
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PingThis\Ping\WhoisDomainExpirationPing;
 
 class WhoisDomainExpirationPingTest extends \PHPUnit\Framework\TestCase
 {
-    /** @dataProvider provideValidResponses */
+    #[DataProvider('provideValidResponses')]
     public function testCheckDateReturnsTrueWhenExpirationAboveThreshold(string $response, string $threshold): void
     {
         $ping = $this->createPing($threshold);
@@ -16,7 +17,7 @@ class WhoisDomainExpirationPingTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($error);
     }
 
-    public function provideValidResponses(): array
+    public static function provideValidResponses(): array
     {
         return [
             ['Expiry Date: 2099-01-01T00:00:00Z', '-1 day'],

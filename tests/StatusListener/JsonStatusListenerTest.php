@@ -7,11 +7,14 @@ use PingThis\StatusListener\JsonStatusListener;
 
 class TestPing extends AbstractPing
 {
+    private string $name;
+    private bool $value;
+
     public function __construct($name, $value)
     {
         parent::__construct(0);
         $this->name = $name;
-        $this->value = $value;
+        $this->value = (bool) $value;
     }
 
     public function getPingFrequency(): int

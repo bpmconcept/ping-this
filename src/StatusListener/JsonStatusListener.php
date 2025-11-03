@@ -7,7 +7,8 @@ use PingThis\Group;
 
 class JsonStatusListener implements StatusListenerInterface
 {
-    protected $file;
+    protected string $file;
+    protected int $options;
 
     public function __construct($file, $options = JSON_PRETTY_PRINT)
     {

@@ -23,7 +23,7 @@ class DaemonTest extends \PHPUnit\Framework\TestCase
         // Simulate a falsy ping
         $ping->expects($this->any())
              ->method('ping')
-             ->will($this->onConsecutiveCalls(true, false, true, false, false, true, false, false, false, true));
+             ->willReturnOnConsecutiveCalls(true, false, true, false, false, true, false, false, false, true);
 
         // The alarm should be notified twice: 1 start, then 1 stop
         $alarm->expects($this->exactly(3))

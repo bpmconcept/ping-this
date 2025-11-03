@@ -10,6 +10,10 @@ use PingThis\Formatter\DefaultFormatter;
  */
 class StreamAlarm extends AbstractAlarm
 {
+    /** @var resource */
+    protected $stream;
+    protected bool $verbose;
+
     public function __construct($stream, bool $verbose = false)
     {
         $this->stream = $stream;

@@ -4,11 +4,11 @@ namespace PingThis\Ping;
 
 class StreamSocketCommandPing extends AbstractPing
 {
-    protected $address;
-    protected $timeout;
-    protected $command;
+    protected string $socket;
+    protected int $timeout;
+    protected ?string $command;
     protected $expression;
-    protected $error;
+    protected ?string $error = null;
 
     /**
      * @param $frequency

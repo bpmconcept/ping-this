@@ -21,12 +21,12 @@ class TlsCertificateExpirationPingTest extends \PHPUnit\Framework\TestCase
 
         $ping->expects($this->any())
              ->method('getCertificateExpirationDate')
-             ->will($this->onConsecutiveCalls(
+             ->willReturnOnConsecutiveCalls(
                 new \DateTime('+ 7 days'),
                 new \DateTime('- 1 days'),
                 new \DateTime('+ 2 days'),
                 new \DateTime('+ 6 hours')
-             ));
+             );
 
         $this->assertTrue($ping->ping());
         $this->assertFalse($ping->ping());

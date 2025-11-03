@@ -8,19 +8,19 @@ class WebScraperPingTest extends \PHPUnit\Framework\TestCase
 {
     public function testScraperResponseOnly()
     {
-        $ping = $this->getMockBuilder('PingThis\Ping\WebScraperPing')
+        $ping = $this->getMockBuilder(WebScraperPing::class)
             ->setConstructorArgs([0, 'GET', 'https://www.google.com', function (Response $response) {
                 return $response->getStatusCode() == 200;
             }])
-            ->setMethods(['doRequest'])
+            ->onlyMethods(['doRequest'])
             ->getMock();
 
         $ping->expects($this->any())
              ->method('doRequest')
-             ->will($this->onConsecutiveCalls(
+             ->willReturnOnConsecutiveCalls(
                 [new Crawler(), new Response('content', 200)],
                 [new Crawler(), new Response('content', 404)]
-             ));
+             );
 
         $this->assertTrue($ping->ping());
         $this->assertFalse($ping->ping());
@@ -28,19 +28,19 @@ class WebScraperPingTest extends \PHPUnit\Framework\TestCase
 
     public function testScraperResponseAndCrawler()
     {
-        $ping = $this->getMockBuilder('PingThis\Ping\WebScraperPing')
+        $ping = $this->getMockBuilder(WebScraperPing::class)
             ->setConstructorArgs([0, 'GET', 'https://www.google.com', function (Response $response, Crawler $crawler) {
                 return $crawler !== null && $response->getStatusCode() == 200;
             }])
-            ->setMethods(['doRequest'])
+            ->onlyMethods(['doRequest'])
             ->getMock();
 
         $ping->expects($this->any())
              ->method('doRequest')
-             ->will($this->onConsecutiveCalls(
+             ->willReturnOnConsecutiveCalls(
                 [new Crawler(), new Response('content', 200)],
                 [new Crawler(), new Response('content', 404)]
-             ));
+             );
 
         $this->assertTrue($ping->ping());
         $this->assertFalse($ping->ping());
@@ -48,17 +48,17 @@ class WebScraperPingTest extends \PHPUnit\Framework\TestCase
 
     public function testScraperExpression()
     {
-        $ping = $this->getMockBuilder('PingThis\Ping\WebScraperPing')
+        $ping = $this->getMockBuilder(WebScraperPing::class)
             ->setConstructorArgs([0, 'GET', 'https://www.google.com', 'response.getStatusCode() == 200 and content != null'])
-            ->setMethods(['doRequest'])
+            ->onlyMethods(['doRequest'])
             ->getMock();
 
         $ping->expects($this->any())
              ->method('doRequest')
-             ->will($this->onConsecutiveCalls(
+             ->willReturnOnConsecutiveCalls(
                 [new Crawler(), new Response('content', 200)],
                 [new Crawler(), new Response('content', 404)]
-             ));
+             );
 
         $this->assertTrue($ping->ping());
         $this->assertFalse($ping->ping());
@@ -66,17 +66,17 @@ class WebScraperPingTest extends \PHPUnit\Framework\TestCase
 
     public function testScraperJsonData()
     {
-        $ping = $this->getMockBuilder('PingThis\Ping\WebScraperPing')
+        $ping = $this->getMockBuilder(WebScraperPing::class)
             ->setConstructorArgs([0, 'GET', 'https://www.google.com', 'response.getStatusCode() == 200 and content["x"][0] == 42'])
-            ->setMethods(['doRequest'])
+            ->onlyMethods(['doRequest'])
             ->getMock();
 
         $ping->expects($this->any())
              ->method('doRequest')
-             ->will($this->onConsecutiveCalls(
+             ->willReturnOnConsecutiveCalls(
                 [new Crawler(), new Response(json_encode(['x' => [42, 43, 44]]), 200, ['content-type' => 'application/json'])],
                 [new Crawler(), new Response(json_encode(['x' => [41, 42, 43]]), 200, ['content-type' => 'application/json'])]
-             ));
+             );
 
         $this->assertTrue($ping->ping());
         $this->assertFalse($ping->ping());
@@ -84,20 +84,20 @@ class WebScraperPingTest extends \PHPUnit\Framework\TestCase
 
     public function testScraperError()
     {
-        $ping = $this->getMockBuilder('PingThis\Ping\WebScraperPing')
+        $ping = $this->getMockBuilder(WebScraperPing::class)
             ->setConstructorArgs([0, 'GET', 'https://www.google.com', function (Response $response, Crawler $crawler, &$error) {
                 $error = $response->getContent();
                 return false;
             }])
-            ->setMethods(['doRequest'])
+            ->onlyMethods(['doRequest'])
             ->getMock();
 
         $ping->expects($this->any())
              ->method('doRequest')
-             ->will($this->onConsecutiveCalls(
+             ->willReturnOnConsecutiveCalls(
                 [new Crawler(), new Response('test1', 200)],
                 [new Crawler(), new Response('test2', 404)]
-             ));
+             );
 
         $this->assertFalse($ping->ping());
         $this->assertEquals('test1', $ping->getLastError());
