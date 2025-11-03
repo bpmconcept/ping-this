@@ -8,13 +8,13 @@
         }
     ],
     "require": {
-        "php": "^8.1",
-        "symfony/expression-language": "^6.4"
+        "php": "^8.2",
+        "symfony/expression-language": "^7.3"
     },
     "require-dev": {
         "geerlingguy/ping": "^1.2",
-        "symfony/browser-kit": "^6.4",
-        "symfony/http-client": "^6.4",
+        "symfony/browser-kit": "^7.3",
+        "symfony/http-client": "^7.3",
         "phpunit/phpunit": "^9.6",
         "ext-sqlite3": "*"
     },
