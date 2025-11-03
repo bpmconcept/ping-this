@@ -1,8 +1,8 @@
 # PingThis
 
-[![Build Status](https://travis-ci.org/bpmconcept/ping-this.svg?branch=master)](https://travis-ci.org/bpmconcept/ping-this)
+[![CI](https://github.com/bpmconcept/ping-this/actions/workflows/php.yml/badge.svg)](https://github.com/bpmconcept/ping-this/actions/workflows/php.yml)
 
-PingThis is a lightweight PHP 7.2+ tool to build simple but functional headless monitoring systems.
+PingThis is a lightweight PHP 8.3+ tool to build simple but functional headless monitoring systems.
 
 ## Example
 
@@ -63,6 +63,7 @@ StreamSocketCommandPing         | Sends a custom payload through a TCP/UDP/Unix 
 TlsCertificateExpirationPing    | Initiates a TLS handshake and checks the expiration date of a certificate
 SnmpGetValuePing                | Gets SNMP object value from a remote SNMP agent
 SnmpWalkValuePing               | Gets SNMP object values from a remote SNMP agent
+SnmpDiskUsagePing               | Walks SNMP storage metrics and checks disk usage against a threshold
 
 ### Web
 
@@ -85,6 +86,8 @@ SmtpServerPing                  | Connects to a SMTP server and checks the welco
 Name                            | Description
 :------------------------------ | :---------------------------------------------------------------------------------------
 LdapSearchPing                  | Executes a query on a LDAP server and checks the response
+MilterPing                      | Simulates an SMTP conversation with a Milter server and validates its actions
+WhoisDomainExpirationPing       | Queries WHOIS to ensure a domain expiration date stays beyond a threshold
 
 ### Built-in Alarms
 
@@ -99,11 +102,9 @@ ParallelAlarm   | Dispatch the alert on multiple other Alarm instances
 
 The recommended way to install PingThis is through Composer :
 
-```
+```bash
 composer require bpmconcept/ping-this
 ```
 
 PingThis does not intend to provide a fully functional daemon out of the box. You are
-still responsible for writing a configured daemon like in the previous example. Thereafter,
-a real daemon can be registered to your favorite init system like [systemd](https://freedesktop.org/wiki/Software/systemd/),
-[upstart](https://help.ubuntu.com/community/UbuntuBootupHowto) or [supervisor](http://supervisord.org/).
+still responsible for writing a configured daemon like in the previous example.
